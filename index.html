@@ -684,7 +684,7 @@ const date=x=>x?new Date(x+"T00:00:00").toLocaleDateString("en-NG",{day:"numeric
 const stamp=x=>x?new Date(x).toLocaleDateString("en-NG",{day:"numeric",month:"long",year:"numeric"}):"Not issued";
 const logo=()=>'<a class="brand" href="/" aria-label="Agrolyst SIWES home"><img class="brand-logo" src="/WhatsApp%20Image%202026-10-19%20at%201.33.54%20PM.jpeg" alt="Agrolyst Integrated Farms and Services logo"><span>STUDENT TRAINING<small>SIWES APPLICATION PORTAL</small></span></a>';
 function layout(html){
- const route=(location.pathname.replace(/\\/+$/, "")||"/");
+ const route=location.pathname.endsWith("/")?location.pathname.slice(0,-1):(location.pathname||"/");
  if(user&&window.AgrolystApp&&["/compliance","/acceptance-letter"].includes(route)){
   const active=route==="/compliance"?"application":"letters";
   const name=(user.user_metadata?.full_name||user.user_metadata?.name||user.email||"Applicant").split(/[ @]/)[0];
