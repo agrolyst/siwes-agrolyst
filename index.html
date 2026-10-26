@@ -758,7 +758,7 @@ async function refreshHomeActions(){
  try{
   const{data,error}=await sb.from("siwes_applications").select("id,status,created_at").eq("user_id",user.id).order("created_at",{ascending:false}).limit(1).maybeSingle();
   if(error)throw error;
-  if(!data)return;
+  if(!data){start.href="/dashboard/";return}
   const status=String(data.status||"compliance_incomplete").toLowerCase();
   const accepted=["approved","acceptance_letter_issued","resumption_confirmed","training_in_progress","completed"].includes(status);
   if(accepted){start.hidden=true;return}
