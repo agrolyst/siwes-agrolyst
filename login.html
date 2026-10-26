@@ -2,99 +2,140 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="theme-color" content="#123d2b">
-<link rel="icon" type="image/jpeg" href="/WhatsApp%20Image%202026-10-19%20at%201.33.54%20PM.jpeg?v=20261026" sizes="any">
-<link rel="shortcut icon" type="image/jpeg" href="/WhatsApp%20Image%202026-10-19%20at%201.33.54%20PM.jpeg?v=20261026">
-<link rel="apple-touch-icon" href="/WhatsApp%20Image%202026-10-19%20at%201.33.54%20PM.jpeg?v=20261026">
-<meta name="description" content="Access the Agrolyst SIWES applicant portal.">
+<meta name="description" content="Sign in to the Agrolyst SIWES applicant portal.">
+<link rel="icon" href="/WhatsApp%20Image%202026-10-19%20at%201.33.54%20PM.jpeg">
 <title>Sign In | Agrolyst SIWES Portal</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{color-scheme:light;--green:#123d2b;--green2:#1e6545;--lime:#d8edaa;--ink:#17251d;--muted:#6b786f;--line:#e2e9e3;--paper:#f3f7ef}
+:root{color-scheme:light;--forest:#103d2b;--green:#1e6842;--lime:#d8edaa;--ink:#183327;--muted:#748077;--line:#e0e8df;--paper:#f4f7f0}
 *{box-sizing:border-box}
-body{margin:0;font-family:"DM Sans",sans-serif;color:var(--ink);background:radial-gradient(ellipse at 10% 8%,#e1ecd8 0,transparent 32%),radial-gradient(ellipse at 92% 90%,#e1ecd8 0,transparent 30%),var(--paper);min-height:100vh;display:grid;place-items:center;padding:32px 22px;overflow-x:hidden}
-.auth-shell{position:relative;width:min(1120px,100%);min-height:660px;display:grid;grid-template-columns:1.04fr .96fr;background:#fff;border:1px solid #dbe5d8;border-radius:24px;overflow:hidden;box-shadow:0 32px 90px #123d2b1c,0 4px 14px #123d2b08;animation:rise .65s cubic-bezier(.2,.7,.2,1) both}
-.story{position:relative;isolation:isolate;min-height:660px;background:#123d2b url("/WhatsApp%20Image%202026-10-19%20at%201.33.54%20PM.jpeg") center/cover no-repeat;color:#fff;display:flex;align-items:flex-end;padding:clamp(28px,4.4vw,54px);overflow:hidden}
-.story:before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,#082b1b2b 0%,#082b1b7d 42%,#062718f2 100%);pointer-events:none}
-.story:after{content:"";position:absolute;z-index:-1;width:360px;height:360px;right:-170px;top:-170px;border:1px solid #d8edaa42;border-radius:50%;box-shadow:0 0 0 34px #ffffff08,0 0 0 70px #ffffff05;animation:drift 13s ease-in-out infinite alternate;pointer-events:none}
-.story-content{position:relative;z-index:1;width:100%;max-width:510px}
-.brand{display:flex;align-items:center;gap:13px;font:800 17px Manrope,sans-serif;letter-spacing:1.8px;margin-bottom:clamp(42px,8vh,78px)}
-.brand img{width:58px;height:58px;padding:5px;object-fit:contain;border-radius:14px;background:#fff;border:1px solid #ffffffc7;box-shadow:0 10px 28px #00180e40}
-.brand>span{display:block;color:#fff;line-height:1.2}
-.brand>span span{color:var(--lime)}
-.eyebrow{display:inline-flex;align-items:center;gap:8px;border:1px solid #ffffff66;border-radius:99px;padding:8px 12px;font-size:10px;font-weight:800;letter-spacing:1.35px;text-transform:uppercase;margin-bottom:18px;background:#ffffff0d;backdrop-filter:blur(8px)}
-.story h1{font:800 clamp(34px,4.2vw,53px)/1.06 Manrope,sans-serif;letter-spacing:-1.8px;margin:0 0 17px;max-width:470px;color:#fff}
-.story h1 em{font-style:normal;color:var(--lime)}
-.story p{color:#e0ebe3;line-height:1.85;max-width:430px;margin:0;font-size:14px}
-.form-side{position:relative;padding:clamp(30px,5vw,66px);display:flex;flex-direction:column;justify-content:center;background:linear-gradient(180deg,#fff 0%,#fbfdf9 100%)}
-.form-side:before{content:"";position:absolute;inset:0;pointer-events:none;background-image:radial-gradient(#123d2b0b 1px,transparent 1px);background-size:20px 20px;mask-image:linear-gradient(180deg,black,transparent 90%)}
-.form-side>*{position:relative}
-.form-side>.eyebrow{border-color:#dce8dc!important;color:#35714e!important;background:#f2f7ef;margin-bottom:18px!important;font-weight:850}
-.form-side h2{font:800 clamp(30px,3.2vw,38px)/1.12 Manrope,sans-serif;letter-spacing:-1.3px;margin:0 0 10px;color:#17251d}
-.intro{color:var(--muted);line-height:1.75;margin:0 0 28px;font-size:14px}
-.field{display:block;margin:0 0 18px}
-.field span{display:block;font-size:12px;font-weight:800;margin-bottom:8px;color:#2a3b2e}
-.field input{width:100%;min-height:50px;border:1px solid #dce6da;border-radius:11px;padding:14px 15px;font:inherit;font-size:13px;outline:none;background:#f9fbf8;color:#17251d;transition:border .2s,box-shadow .2s,background .2s}
-.field input:focus{border-color:#347753;background:#fff;box-shadow:0 0 0 4px #34775317}
-.field input::placeholder{color:#9aa49a}
-.password-wrap{display:flex;gap:9px}
-.password-wrap input{flex:1;min-width:0}
-.show-pass{border:1px solid #dce6da;background:#fff;border-radius:11px;padding:0 14px;color:var(--green);font-weight:800;font-size:12px;cursor:pointer;transition:background .2s,border-color .2s}
-.show-pass:hover{background:#f0f6ed;border-color:#a8c3a6}
-.primary{width:100%;min-height:50px;border:0;border-radius:11px;background:linear-gradient(105deg,#0d4c30,#1e6842 68%,#2c8050);box-shadow:0 10px 22px #123d2b22;color:white;padding:15px 18px;font:800 13px Manrope,sans-serif;cursor:pointer;transition:transform .2s,box-shadow .2s}
-.primary:hover{background:linear-gradient(105deg,#0d4c30,#1e6842 68%,#2c8050);transform:translateY(-2px);box-shadow:0 14px 27px #123d2b2d}
+html{min-height:100%;background:var(--paper)}
+body{margin:0;min-height:100vh;padding:28px clamp(14px,4vw,54px);display:grid;place-items:center;font-family:"DM Sans",sans-serif;color:var(--ink);background:radial-gradient(ellipse at 8% 12%,#e0ebd9 0,transparent 35%),radial-gradient(ellipse at 95% 90%,#e5eedf 0,transparent 32%),var(--paper);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.auth-shell{width:min(1240px,100%);min-height:min(680px,calc(100vh - 56px));display:grid;grid-template-columns:minmax(0,1.12fr) minmax(380px,.88fr);border:1px solid #dce6da;border-radius:23px;overflow:hidden;background:#fff;box-shadow:0 28px 90px #123d2b17,0 4px 18px #123d2b08;animation:rise .7s cubic-bezier(.2,.7,.2,1) both}
+.brand-panel{position:relative;isolation:isolate;display:flex;flex-direction:column;justify-content:space-between;gap:30px;overflow:hidden;padding:clamp(30px,4.5vw,56px);color:#fff;background:#103d2b}
+.brand-panel:before{content:"";position:absolute;z-index:-2;inset:0;background:url("https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?auto=format&fit=crop&w=1800&q=90") center/cover no-repeat;transform:scale(1.04);animation:photoIn 1.2s ease-out both}
+.brand-panel:after{content:"";position:absolute;z-index:-1;inset:0;background:linear-gradient(115deg,#073421df 0%,#0a432fd1 39%,#0a3928bd 70%,#0b3025c9 100%),radial-gradient(circle at 80% 12%,#d8edaa25,transparent 24%);pointer-events:none}
+.brand-lockup{display:flex;align-items:center;gap:12px;position:relative;z-index:1}
+.brand-lockup img{width:52px;height:52px;padding:4px;object-fit:contain;border-radius:12px;background:white;border:1px solid #ffffffba;box-shadow:0 7px 22px #001c1040}
+.brand-name{font:800 15px/1.2 Manrope,sans-serif;letter-spacing:1.8px}
+.brand-name small{display:block;margin-top:5px;font:750 8px/1.4 "DM Sans",sans-serif;letter-spacing:1.35px;color:#d6e3d8}
+.story-copy{position:relative;z-index:1;max-width:560px;margin-top:auto;margin-bottom:auto;padding:42px 0 50px}
+.story-kicker{display:flex;align-items:center;gap:9px;color:#e0e9b1;font-size:10px;font-weight:850;letter-spacing:1.45px;text-transform:uppercase;margin-bottom:22px}
+.story-kicker:before{content:"";width:11px;height:11px;border:1px solid #d8edaa;border-radius:50%;box-shadow:inset 0 0 0 3px #103d2b;background:#d8edaa}
+.story-copy h1{font:800 clamp(43px,5.2vw,66px)/1.03 Manrope,sans-serif;letter-spacing:-2.9px;color:#fff;margin:0 0 21px;max-width:540px}
+.story-copy h1 em{font-style:normal;color:#e6d98e}
+.story-copy p{max-width:440px;color:#e4eee7;font-size:14px;line-height:1.85;margin:0}
+.benefits{display:flex;flex-wrap:wrap;gap:9px;margin-top:25px}
+.benefit{display:flex;align-items:center;gap:8px;padding:9px 12px;border:1px solid #ffffff45;border-radius:999px;background:#ffffff0c;color:#eef5ec;font-size:10px;font-weight:650;backdrop-filter:blur(7px)}
+.benefit svg{width:14px;height:14px;stroke:#e4e6a3;flex:none}
+.story-footer{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;color:#d6e4d8;font-size:9px;font-weight:750;letter-spacing:.2px;position:relative;z-index:1}
+.story-footer strong{color:#ebd985}
+.form-panel{display:flex;align-items:center;justify-content:center;padding:clamp(28px,4vw,54px);background:linear-gradient(180deg,#fff 0%,#fcfdfb 100%)}
+.form-inner{width:100%;max-width:410px}
+.form-brand-mobile{display:none}
+.form-heading-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:28px}
+.mini-brand{display:flex;align-items:center;gap:9px}
+.mini-brand img{width:34px;height:34px;object-fit:contain}
+.mini-brand strong{display:block;font:850 10px Manrope,sans-serif;letter-spacing:1.3px;color:#214734}
+.mini-brand small{display:block;font-size:7px;letter-spacing:.7px;color:#7b897e;margin-top:3px}
+.secure-label{display:flex;gap:6px;align-items:center;color:#7d8d80;font-size:9px;white-space:nowrap}
+.secure-label svg{width:13px;height:13px;stroke:#2b8952}
+.form-inner h2{font:800 clamp(28px,3vw,36px)/1.15 Manrope,sans-serif;letter-spacing:-1.35px;margin:0 0 9px;color:#173e2c}
+.intro{margin:0 0 25px;color:var(--muted);font-size:12px;line-height:1.7}
+.field{display:block;margin-bottom:16px}
+.field label{display:block;font-size:11px;font-weight:800;margin-bottom:8px;color:#34483a}
+.input-wrap{position:relative}
+.input-wrap svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:16px;height:16px;stroke:#839086;pointer-events:none}
+.field input{width:100%;height:49px;border:1px solid #d9e4d8;border-radius:10px;background:#fafcf9;padding:0 14px 0 42px;font:500 12px "DM Sans",sans-serif;color:#1b3827;outline:none;transition:border .2s,box-shadow .2s,background .2s}
+.field input::placeholder{color:#8d978e}
+.field input:focus{border-color:#347b50;background:#fff;box-shadow:0 0 0 4px #286c4215}
+.label-row{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.text-btn{border:0;background:transparent;padding:0;color:#287747;font:750 10px "DM Sans",sans-serif;cursor:pointer}
+.text-btn:hover{text-decoration:underline}
+.password-toggle{position:absolute;right:12px;top:50%;transform:translateY(-50%);border:0;background:transparent;color:#2b7548;font-size:10px;font-weight:750;cursor:pointer}
+.password-wrap input{padding-right:60px}
+.primary{width:100%;height:49px;border:0;border-radius:10px;display:flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(105deg,#0c432c,#1e6842 67%,#237c4b);color:#fff;font:800 12px Manrope,sans-serif;cursor:pointer;box-shadow:0 9px 21px #123d2b22;transition:transform .2s,box-shadow .2s,opacity .2s}
+.primary:hover{transform:translateY(-1px);box-shadow:0 13px 25px #123d2b2c}
 .primary:disabled{opacity:.65;cursor:wait;transform:none}
-.or{display:flex;align-items:center;gap:12px;color:#89948c;font-size:11px;margin:23px 0}
-.or:before,.or:after{content:"";height:1px;background:#e4ebe1;flex:1}
-.google{width:100%;min-height:49px;display:flex;align-items:center;justify-content:center;gap:11px;background:white;border:1px solid #dce6da;border-radius:11px;padding:13px 15px;font:800 12px "DM Sans",sans-serif;color:#26352a;cursor:pointer;transition:background .2s,border-color .2s,transform .2s}
-.google:hover{background:#f8fbf6;border-color:#a8c3a6;transform:translateY(-1px)}
-.google svg{width:18px;height:18px;flex:0 0 18px}
-.foot{font-size:12px;text-align:center;color:var(--muted);margin:22px 0 0}
-.foot a,.back a{color:var(--green2);font-weight:800;text-decoration:none}
-.foot a:hover,.back a:hover{text-decoration:underline}
-.message{display:none;border-radius:11px;padding:12px 13px;font-size:13px;line-height:1.6;margin:0 0 16px}
-.message.error{display:block;background:#fff0ed;color:#a12c1e;border:1px solid #f3d0c8}
-.message.success{display:block;background:#eef8ed;color:#23613a;border:1px solid #d5e9d2}
-.fineprint{font-size:10px;color:#89948c;text-align:center;line-height:1.7;margin:17px 0 0}
-.back{font-size:11px;margin-top:22px;text-align:center;color:var(--muted)}
-@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
-@keyframes drift{from{transform:translate3d(0,0,0) rotate(-8deg)}to{transform:translate3d(-12px,14px,0) rotate(8deg)}}
-@media(max-width:760px){body{padding:14px}.auth-shell{grid-template-columns:1fr;min-height:0;border-radius:20px;max-width:540px}.story{min-height:310px;padding:26px}.brand{margin-bottom:34px}.brand img{width:50px;height:50px}.story h1{font-size:34px;max-width:500px}.story p{font-size:13px}.form-side{padding:30px 24px 32px}.form-side h2{font-size:29px}}
-@media(max-width:430px){body{padding:9px}.auth-shell{border-radius:17px}.story{min-height:270px;padding:21px}.brand{font-size:15px;margin-bottom:27px}.story h1{font-size:30px}.form-side{padding:25px 19px 28px}.form-side h2{font-size:27px}.intro{font-size:13px}}
+.primary svg{width:15px;height:15px;stroke:currentColor}
+.forgot-row{text-align:right;margin-top:-5px;margin-bottom:17px}
+.divider{display:flex;align-items:center;gap:12px;color:#929c93;font-size:9px;margin:18px 0}
+.divider:before,.divider:after{content:"";height:1px;flex:1;background:#e5ebe2}
+.google-slot{min-height:43px;width:100%;display:flex;align-items:center;justify-content:center;border:1px solid #dce5da;border-radius:8px;background:#fff;overflow:hidden}
+.google-slot:empty{display:none}
+.google-slot button{max-width:100%}
+.account-switch{text-align:center;color:#7d887f;font-size:10px;margin:29px 0 24px}
+.account-switch a{font-weight:800;color:#1c7741;text-decoration:none}
+.account-switch a:hover{text-decoration:underline}
+.legal{font-size:9px;line-height:1.65;color:#88948a;margin:0}
+.legal a{color:#3c6c4d;text-decoration:underline;text-underline-offset:2px}
+.message{display:none;border-radius:9px;padding:11px 12px;margin:0 0 15px;font-size:11px;line-height:1.6}
+.message.error,.message.success{display:block}
+.message.error{background:#fff0ed;color:#a12c1e;border:1px solid #f3d0c8}
+.message.success{background:#eef8ed;color:#23613a;border:1px solid #d5e9d2}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes photoIn{from{transform:scale(1.09);filter:saturate(.7)}to{transform:scale(1.04);filter:saturate(1)}}
+@media(max-width:860px){body{padding:16px}.auth-shell{grid-template-columns:1fr;max-width:560px;min-height:0}.brand-panel{min-height:340px;padding:26px}.story-copy{padding:32px 0 28px}.story-copy h1{font-size:39px;letter-spacing:-1.5px}.story-copy p{font-size:12px}.benefits{margin-top:17px}.story-footer{font-size:8px}.form-panel{padding:30px 26px 34px}}
+@media(max-width:480px){body{padding:8px}.auth-shell{border-radius:17px}.brand-panel{min-height:0;padding:21px}.brand-lockup img{width:44px;height:44px}.story-copy{padding:27px 0 23px}.story-copy h1{font-size:32px;letter-spacing:-1.1px;margin-bottom:13px}.story-copy p{font-size:11px;line-height:1.7}.benefits{gap:6px}.benefit{font-size:9px;padding:7px 9px}.story-footer{gap:8px}.form-panel{padding:25px 19px 28px}.form-heading-row{margin-bottom:24px}.form-inner h2{font-size:28px}.account-switch{margin:24px 0 19px}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body>
 <main class="auth-shell">
-<aside class="story"><div class="story-content"><div class="brand"><img src="/WhatsApp%20Image%202026-10-19%20at%201.33.54%20PM.jpeg" alt="Agrolyst Integrated Farms and Services logo"><span style="color:#fff">AGROLYST <span>SIWES</span></span></div><div style="height:34px"></div><div class="eyebrow">Applicant portal</div><h1>Build your future in <em>agriculture.</em></h1><p>Manage your SIWES application, keep your information in one place, and follow your next steps with Agrolyst.</p></div></aside>
-<section class="form-side">
-<div class="eyebrow" style="border-color:#dce8dc;color:#35714e;margin-bottom:16px">AGROLYST INTEGRATED FARMS</div>
-<h2>Welcome back</h2><p class="intro">Sign in to continue to your SIWES applicant dashboard.</p>
-<div id="message" class="message" role="status" aria-live="polite"></div>
-<form id="auth-form">
-
-<label class="field"><span>Email address</span><input id="email" type="email" autocomplete="email" placeholder="you@example.com" required></label>
-<label class="field"><span>Password</span><div class="password-wrap"><input id="password" type="password" autocomplete="current-password" minlength="6" placeholder="At least 6 characters" required><button class="show-pass" type="button" id="toggle-pass">Show</button></div></label>
-
-<button class="primary" id="submit" type="submit">Sign in</button>
-</form>
-<div class="or">or continue with</div>
-<div class="google" id="google-button-slot" aria-label="Continue with Google"><svg viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 3.56 13.22l7.98 6.19C13.43 13.72 18.2 9.5 24 9.5z" transform="translate(0 4)"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.76 7.18l7.73 6C44.42 38.06 46.98 31.84 46.98 24.55z"/><path fill="#FBBC05" d="M11.53 28.59A14.4 14.4 0 0 1 10.75 24c0-1.59.27-3.13.76-4.59l-7.98-6.19A23.9 23.9 0 0 0 1 24c0 3.87.93 7.54 2.56 10.78l7.97-6.19z" transform="translate(0 4)"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.9-5.8l-7.73-6c-2.14 1.44-4.89 2.3-8.17 2.3-5.8 0-10.57-4.22-12.46-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z" transform="translate(0 -2)"/></svg>Continue with Google</div>
-<p class="foot">New to the portal? <a href="/signup.html">Create an account</a></p><p class="fineprint">Your account information is handled securely. Only use details you can access.</p><div class="back"><a href="/">← Back to SIWES portal</a></div>
+<aside class="brand-panel" aria-label="Agrolyst SIWES introduction">
+  <div class="brand-lockup"><img src="/WhatsApp%20Image%202026-10-19%20at%201.33.54%20PM.jpeg" alt="Agrolyst logo"><div class="brand-name">AGROLYST<small>INTEGRATED FARMS AND SERVICES</small></div></div>
+  <div class="story-copy">
+    <div class="story-kicker">MARKET TO FARM</div>
+    <h1>Welcome back<br>to <em>Agrolyst.</em></h1>
+    <p>Sign in to manage your SIWES application and stay connected with Agrolyst Integrated Farms and Services.</p>
+    <div class="benefits">
+      <span class="benefit"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M12 3v18M3 12h18"/><circle cx="12" cy="12" r="8"/></svg>Farm-grown ambition</span>
+      <span class="benefit"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="m12 3 8 3v5c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><path d="m8.5 12 2.2 2.2 4.8-5"/></svg>Secure account access</span>
+      <span class="benefit"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="m3 17 6-6 4 3 8-9"/><path d="M15 5h6v6"/></svg>Built for growth</span>
+    </div>
+  </div>
+  <div class="story-footer"><span>Market to Farm. Empowering Farmers.</span><strong>Growing the Future.</strong></div>
+</aside>
+<section class="form-panel">
+<div class="form-inner">
+  <div class="form-heading-row">
+    <div class="mini-brand"><img src="/WhatsApp%20Image%202026-10-19%20at%201.33.54%20PM.jpeg" alt=""><span><strong>AGROLYST FARMS</strong><small>INTEGRATED FARMS AND SERVICES</small></span></div>
+    <span class="secure-label"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v3"/></svg>Secure sign-in</span>
+  </div>
+  <h2 id="form-title">Welcome back</h2>
+  <p class="intro" id="form-intro">Sign in to your Agrolyst SIWES account.</p>
+  <div class="message" id="message" role="status" aria-live="polite"></div>
+  <form id="auth-form">
+    <div class="field"><div class="label-row"><label for="email">Email address</label></div><div class="input-wrap"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg><input id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required></div></div>
+    <div class="field"><div class="label-row"><label for="password">Password</label><button id="toggle-password" class="text-btn" type="button">Show password</button></div><div class="input-wrap password-wrap"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><rect x="3" y="10" width="18" height="11" rx="2"/><path d="M7 10V7a5 5 0 0 1 10 0v3"/></svg><input id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter your password" minlength="6" required></div></div>
+    <div class="forgot-row"><a href="/forgot-password/" id="forgot-password" class="text-btn">Forgot password?</a></div>
+    <button class="primary" id="submit" type="submit"><span>Sign in</span><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></button>
+  </form>
+  <div class="divider"><span>or continue with</span></div>
+  <div class="google-slot" id="google-button-slot" aria-label="Continue with Google"></div>
+  <p class="account-switch"><span id="switch-label">New to Agrolyst SIWES?</span> <a href="/signup/" id="switch-link">Create an account</a></p>
+  <p class="legal">By continuing, you agree to our <a href="/agreement/">Terms of Service</a> and acknowledge our <a href="/privacy/">Privacy Policy</a>.</p>
+</div>
 </section>
 </main>
-<script src="https://accounts.google.com/gsi/client" async defer id="agrolyst-gsi"></script><script type="module">
+<script src="https://accounts.google.com/gsi/client" async defer id="agrolyst-gsi"></script>
+<script type="module">
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
-const sb = createClient("https://orhlccyodjuhwoaelmyd.supabase.co","sb_publishable_3HEzwj5aGJx3VOQD7l8jwQ_MngS3dcK",{auth:{autoRefreshToken:true,persistSession:true,detectSessionInUrl:true}});
-const signup = false;
-const form = document.getElementById("auth-form"), submit = document.getElementById("submit"), message = document.getElementById("message");
+const sb=createClient("https://orhlccyodjuhwoaelmyd.supabase.co","sb_publishable_3HEzwj5aGJx3VOQD7l8jwQ_MngS3dcK",{auth:{autoRefreshToken:true,persistSession:true,detectSessionInUrl:true}});
+const form=document.getElementById("auth-form"),submit=document.getElementById("submit"),message=document.getElementById("message");
+let mode="login";
 function showMessage(text,kind="error"){message.textContent=text;message.className="message "+kind}
-document.getElementById("toggle-pass").addEventListener("click",()=>{const p=document.getElementById("password"),b=document.getElementById("toggle-pass");p.type=p.type==="password"?"text":"password";b.textContent=p.type==="password"?"Show":"Hide"});
-form.addEventListener("submit",async e=>{e.preventDefault();submit.disabled=true;submit.textContent=signup?"Creating account…":"Signing in…";message.className="message";try{const email=document.getElementById("email").value.trim(),password=document.getElementById("password").value;let result;if(signup){const fullName=document.getElementById("full-name").value.trim();result=await sb.auth.signUp({email,password,options:{data:{full_name:fullName},emailRedirectTo:location.origin+"/dashboard/"}})}else{result=await sb.auth.signInWithPassword({email,password})}if(result.error)throw result.error;if(signup&&!result.data.session){showMessage("Account created. Check your email to confirm your address, then sign in.","success");submit.textContent="Account created";return}location.href="/dashboard/"}catch(err){showMessage(err.message||"Unable to continue. Please try again.");submit.disabled=false;submit.textContent=signup?"Create account":"Sign in"}})
-const googleSlot=document.getElementById("google-button-slot");function mountGoogleButton(){if(!window.google?.accounts?.id||!googleSlot)return;google.accounts.id.initialize({client_id:"984810017292-kq5s86cprnf39paraa7772c66uomml3n.apps.googleusercontent.com",use_fedcm_for_prompt:true,auto_select:false,callback:async response=>{try{if(!response?.credential)throw new Error("Google did not return an account credential.");const{error}=await sb.auth.signInWithIdToken({provider:"google",token:response.credential});if(error)throw error;location.href="/dashboard/"}catch(err){showMessage(err.message||"Google sign-in failed. Please try again.")}}});google.accounts.id.renderButton(googleSlot,{type:"standard",theme:"outline",size:"large",text:"continue_with",shape:"rectangular",logo_alignment:"left",width:350})}const googleScript=document.getElementById("agrolyst-gsi");if(window.google?.accounts?.id)mountGoogleButton();else googleScript?.addEventListener("load",mountGoogleButton,{once:true});
+document.getElementById("toggle-password").addEventListener("click",()=>{const p=document.getElementById("password"),b=document.getElementById("toggle-password");p.type=p.type==="password"?"text":"password";b.textContent=p.type==="password"?"Show password":"Hide password"});
+document.getElementById("switch-link").addEventListener("click",async e=>{e.preventDefault();if(mode==="login"){location.href="/signup/";return}location.href="/login/"});
+form.addEventListener("submit",async e=>{e.preventDefault();submit.disabled=true;submit.querySelector("span").textContent=mode==="signup"?"Creating account…":"Signing in…";message.className="message";try{const email=document.getElementById("email").value.trim(),password=document.getElementById("password").value;let result;if(mode==="signup"){result=await sb.auth.signUp({email,password,options:{data:{full_name:""},emailRedirectTo:location.origin+"/dashboard/"}})}else{result=await sb.auth.signInWithPassword({email,password})}if(result.error)throw result.error;if(mode==="signup"&&!result.data.session){showMessage("Account created. Check your email to confirm your address, then sign in.","success");submit.querySelector("span").textContent="Account created";return}location.href="/dashboard/"}catch(err){showMessage(err.message||"Unable to continue. Please try again.");submit.disabled=false;submit.querySelector("span").textContent=mode==="signup"?"Create account":"Sign in"}});
+const googleSlot=document.getElementById("google-button-slot");
+function mountGoogleButton(){if(!window.google?.accounts?.id||!googleSlot)return;google.accounts.id.initialize({client_id:"984810017292-kq5s86cprnf39paraa7772c66uomml3n.apps.googleusercontent.com",use_fedcm_for_prompt:true,auto_select:false,callback:async response=>{try{if(!response?.credential)throw new Error("Google did not return an account credential.");const{error}=await sb.auth.signInWithIdToken({provider:"google",token:response.credential});if(error)throw error;location.href="/dashboard/"}catch(err){showMessage(err.message||"Google sign-in failed. Please try again.")}}});google.accounts.id.renderButton(googleSlot,{type:"standard",theme:"outline",size:"large",text:"continue_with",shape:"rectangular",logo_alignment:"left",width:350})}
+const googleScript=document.getElementById("agrolyst-gsi");if(window.google?.accounts?.id)mountGoogleButton();else googleScript?.addEventListener("load",mountGoogleButton,{once:true});
 sb.auth.getSession().then(({data})=>{if(data.session)location.replace("/dashboard/")});
 </script>
 </body>
