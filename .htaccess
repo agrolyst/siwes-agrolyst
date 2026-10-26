@@ -1,0 +1,9 @@
+RewriteEngine On
+
+# Serve real files and directories normally.
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
+
+# Send clean application URLs (for example /dashboard/) to the SPA router.
+RewriteRule ^ index.html [L,QSA]
