@@ -135,18 +135,28 @@ document.getElementById("toggle-password").addEventListener("click",()=>{const p
 document.getElementById("switch-link").addEventListener("click",async e=>{e.preventDefault();if(mode==="login"){location.href="/signup/";return}location.href="/login/"});
 form.addEventListener("submit",async e=>{e.preventDefault();submit.disabled=true;submit.querySelector("span").textContent=mode==="signup"?"Creating account…":"Signing in…";message.className="message";try{const email=document.getElementById("email").value.trim(),password=document.getElementById("password").value;let result;if(mode==="signup"){result=await sb.auth.signUp({email,password,options:{data:{full_name:""},emailRedirectTo:location.origin+"/dashboard/"}})}else{result=await sb.auth.signInWithPassword({email,password})}if(result.error)throw result.error;if(mode==="signup"&&!result.data.session){showMessage("Account created. Check your email to confirm your address, then sign in.","success");submit.querySelector("span").textContent="Account created";return}location.href="/dashboard/"}catch(err){showMessage(err.message||"Unable to continue. Please try again.");submit.disabled=false;submit.querySelector("span").textContent=mode==="signup"?"Create account":"Sign in"}});
 const googleSlot=document.getElementById("google-button-slot");
-function mountGoogleButton(){
+let googleRawNonce="";
+async function createGoogleNonce(){
+ const bytes=new Uint8Array(32);
+ crypto.getRandomValues(bytes);
+ googleRawNonce=Array.from(bytes,b=>b.toString(16).padStart(2,"0")).join("");
+ const digest=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(googleRawNonce));
+ return Array.from(new Uint8Array(digest),b=>b.toString(16).padStart(2,"0")).join("");
+}
+async function mountGoogleButton(){
  if(!window.google?.accounts?.id||!googleSlot||googleSlot.dataset.mounted==="true")return;
  googleSlot.dataset.mounted="true";
+ const hashedGoogleNonce=await createGoogleNonce();
  google.accounts.id.initialize({
   client_id:"984810017292-kq5s86cprnf39paraa7772c66uomml3n.apps.googleusercontent.com",
+  nonce:hashedGoogleNonce,
   use_fedcm_for_prompt:true,
   use_fedcm_for_button:true,
   auto_select:false,
   callback:async response=>{
    try{
     if(!response?.credential)throw new Error("Google did not return an account credential.");
-    const {error}=await sb.auth.signInWithIdToken({provider:"google",token:response.credential});
+    const {error}=await sb.auth.signInWithIdToken({provider:"google",token:response.credential,nonce:googleRawNonce});
     if(error)throw error;
     location.href="/dashboard/";
    }catch(err){showMessage(err.message||"Google sign-in failed. Please try again.");}
