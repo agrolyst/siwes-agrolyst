@@ -779,7 +779,7 @@ async function compliance(){
    val.status="under_review";val.submitted_at=new Date().toISOString();
    const{error}=await sb.from("siwes_applications").update(val).eq("id",a.id);if(error)throw error;
    msg("cm","Your SIWES application has been submitted for review. Reference: "+a.reference_no+". Redirecting to your dashboard…");setTimeout(()=>location.href="/dashboard/",1200)
-  }catch(e){msg("cm",e.message,true)}finally{b.disabled=false;b.textContent="Submit SIWES application"}
+  }catch(e){msg("cm",e.message,true)}finally{b.disabled=false;b.textContent="Submit for approval"}
  };
 }
 function setupComplianceWizard(form, application){
