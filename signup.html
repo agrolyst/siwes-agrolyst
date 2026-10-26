@@ -156,6 +156,11 @@ function mountGoogleButton(){
   type:"standard",theme:"outline",size:"large",text:"continue_with",
   shape:"rectangular",logo_alignment:"left",width:350
  });
+ google.accounts.id.prompt(notification=>{
+  if(notification.isNotDisplayed?.()||notification.isSkippedMoment?.()){
+   console.info("Google One Tap is not available in this browser/session.");
+  }
+ });
 }
 const googleScript=document.createElement("script");
 googleScript.src="https://accounts.google.com/gsi/client";
