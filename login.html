@@ -156,6 +156,13 @@ function mountGoogleButton(){
   type:"standard",theme:"outline",size:"large",text:"continue_with",
   shape:"rectangular",logo_alignment:"left",width:350
  });
+ // Request Google's small "Continue as…" One Tap prompt without changing the page layout.
+ // Google decides whether and where the prompt can be shown for this browser/session.
+ google.accounts.id.prompt(notification=>{
+  if(notification.isNotDisplayed?.()||notification.isSkippedMoment?.()){
+   console.info("Google One Tap was not displayed in this browser/session.");
+  }
+ });
 }
 const googleScript=document.createElement("script");
 googleScript.src="https://accounts.google.com/gsi/client";
