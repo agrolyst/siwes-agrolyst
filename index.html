@@ -657,5 +657,29 @@ layout('<main class="legal-page"><section class="legal-hero"><div class="shell l
 function privacy(){legalPage("privacy")}
 function agreement(){legalPage("agreement")}
 async function init(){const{data:{session}}=await sb.auth.getSession();user=session?.user||null;const p=location.pathname.replace(/\/+$/,"")||"/";if(p==="/"||p==="/index.html")home();else if(p==="/login"){mode="login";login()}else if(p==="/signup"||p==="/register"){mode="signup";login()}else if(p==="/dashboard")dashboard();else if(p==="/compliance")compliance();else if(p==="/acceptance-letter")letter();else if(p==="/admin")admin();else if(p==="/privacy"||p==="/policy")privacy();else if(p==="/agreement")agreement();else home()}
-sb.auth.onAuthStateChange((_event,session)=>{user=session?.user||null});init().catch(e=>{console.error("Agrolyst SIWES initialisation error:",e);user=null;try{home();const main=document.querySelector("main");if(main){const notice=document.createElement("div");notice.className="shell";notice.innerHTML='<div class="notice warning" role="status" style="margin-top:18px"><strong>Some account features may be temporarily unavailable.</strong><br>The programme information is available below. Please try signing in again shortly if your dashboard does not load.</div>';main.prepend(notice)}}catch(renderError){console.error("Agrolyst landing page fallback error:",renderError);root.innerHTML='<main class="shell section"><div class="panel"><div class="eyebrow">Agrolyst SIWES</div><h1>Student training, real-world learning.</h1><p>The portal could not connect to the account service just now. Please try again in a moment.</p><a class="btn" href="/">Return to programme</a> <button onclick="location.reload()">Try again</button></div></main>'}});
+function syncAuthNavigation(session){
+ user=session?.user||null;
+ const actions=document.querySelector(".nav-actions");
+ if(actions){
+  let accountLink=actions.querySelector('a[href="/login/"],a[href="/dashboard/"]');
+  if(accountLink){
+   accountLink.href=user?"/dashboard/":"/login/";
+   accountLink.textContent=user?"Dashboard":"Sign in";
+   accountLink.setAttribute("aria-label",user?"Open your dashboard":"Sign in to your account");
+  }
+ }
+ const nav=document.getElementById("links");
+ if(nav){
+  let dashboardLink=nav.querySelector('a[data-auth-dashboard="true"]');
+  if(user&&!dashboardLink){
+   dashboardLink=document.createElement("a");
+   dashboardLink.href="/dashboard/";
+   dashboardLink.dataset.authDashboard="true";
+   dashboardLink.textContent="Dashboard";
+   const first=nav.querySelector('a[href="/"]');
+   if(first)first.after(dashboardLink);else nav.prepend(dashboardLink);
+  }else if(!user&&dashboardLink){dashboardLink.remove()}
+ }
+}
+sb.auth.onAuthStateChange((_event,session)=>{syncAuthNavigation(session)});init().catch(e=>{console.error("Agrolyst SIWES initialisation error:",e);user=null;try{home();const main=document.querySelector("main");if(main){const notice=document.createElement("div");notice.className="shell";notice.innerHTML='<div class="notice warning" role="status" style="margin-top:18px"><strong>Some account features may be temporarily unavailable.</strong><br>The programme information is available below. Please try signing in again shortly if your dashboard does not load.</div>';main.prepend(notice)}}catch(renderError){console.error("Agrolyst landing page fallback error:",renderError);root.innerHTML='<main class="shell section"><div class="panel"><div class="eyebrow">Agrolyst SIWES</div><h1>Student training, real-world learning.</h1><p>The portal could not connect to the account service just now. Please try again in a moment.</p><a class="btn" href="/">Return to programme</a> <button onclick="location.reload()">Try again</button></div></main>'}});
 </script></body></html>
