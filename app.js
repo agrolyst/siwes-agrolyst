@@ -14,7 +14,7 @@
     const initial = (safeName.trim()[0] || "A").toUpperCase();
     const links = [
       ["overview","/dashboard/","Overview",icons.overview],
-      ["application","/compliance/","My application",icons.application],
+      ["application","/compliance.html","My application",icons.application],
       ["letters","/acceptance-letter/","Letters & documents",icons.letters]
     ];
     return '<aside class="dash-side" aria-label="Applicant workspace navigation"><div class="dash-profile"><div class="dash-avatar" aria-hidden="true">'+initial+'</div><div><strong>'+safeName+'</strong><span>SIWES Applicant</span></div></div><div class="dash-nav-label">WORKSPACE</div>'+links.map(x=>'<a class="dash-nav'+(active===x[0]?' active':'')+'" href="'+x[1]+'"'+(active===x[0]?' aria-current="page"':'')+'>'+x[3]+x[2]+'</a>').join('')+'<div class="dash-side-bottom"><div class="dash-help">'+icons.help+'<strong>Need help?</strong><p>Check the programme guide or contact the Agrolyst team.</p><a href="/#faq">View FAQs →</a></div><button type="button" id="signout" class="dash-signout">'+icons.signout+'Sign out</button></div></aside>';
