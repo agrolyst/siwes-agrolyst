@@ -124,7 +124,7 @@ a{color:inherit}
 </div>
 </section>
 </main>
-<script src="https://accounts.google.com/gsi/client" async defer id="agrolyst-gsi"></script>
+
 <script type="module">
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
 const sb=createClient("https://orhlccyodjuhwoaelmyd.supabase.co","sb_publishable_3HEzwj5aGJx3VOQD7l8jwQ_MngS3dcK",{auth:{autoRefreshToken:true,persistSession:true,detectSessionInUrl:true}});
@@ -135,8 +135,24 @@ document.getElementById("toggle-password").addEventListener("click",()=>{const p
 document.getElementById("switch-link").addEventListener("click",async e=>{e.preventDefault();if(mode==="login"){location.href="/signup/";return}location.href="/login/"});
 form.addEventListener("submit",async e=>{e.preventDefault();submit.disabled=true;submit.querySelector("span").textContent=mode==="signup"?"Creating account…":"Signing in…";message.className="message";try{const email=document.getElementById("email").value.trim(),password=document.getElementById("password").value;let result;if(mode==="signup"){result=await sb.auth.signUp({email,password,options:{data:{full_name:""},emailRedirectTo:location.origin+"/dashboard/"}})}else{result=await sb.auth.signInWithPassword({email,password})}if(result.error)throw result.error;if(mode==="signup"&&!result.data.session){showMessage("Account created. Check your email to confirm your address, then sign in.","success");submit.querySelector("span").textContent="Account created";return}location.href="/dashboard/"}catch(err){showMessage(err.message||"Unable to continue. Please try again.");submit.disabled=false;submit.querySelector("span").textContent=mode==="signup"?"Create account":"Sign in"}});
 const googleSlot=document.getElementById("google-button-slot");
-let googleReady=false,googlePromptOpen=false;
-function mountGoogleButton(){if(!window.google?.accounts?.id||!googleSlot||googleReady)return;google.accounts.id.initialize({client_id:"984810017292-kq5s86cprnf39paraa7772c66uomml3n.apps.googleusercontent.com",use_fedcm_for_prompt:true,auto_select:false,callback:async response=>{try{if(!response?.credential)throw new Error("Google did not return an account credential.");googleSlot.disabled=true;showMessage("Google account received. Signing you in…","success");const{error}=await sb.auth.signInWithIdToken({provider:"google",token:response.credential});if(error)throw error;location.href="/dashboard/"}catch(err){googleSlot.disabled=false;showMessage(err.message||"Google sign-in failed. Please try again.")}}});googleReady=true;googleSlot.addEventListener("click",()=>{if(!window.google?.accounts?.id){showMessage("Google sign-in is still loading. Please try again.");return}if(googlePromptOpen)return;googlePromptOpen=true;message.className="message";google.accounts.id.prompt(notification=>{googlePromptOpen=false;if(notification.isNotDisplayed?.()||notification.isSkippedMoment?.()){showMessage("Google’s on-page account prompt is unavailable in this browser or session. Try again or use email and password sign-in.")}})})}
+googleSlot?.addEventListener("click",async()=>{
+  if(!googleSlot||googleSlot.disabled)return;
+  googleSlot.disabled=true;
+  const label=googleSlot.querySelector("span");
+  if(label)label.textContent="Connecting to Google…";
+  message.className="message";
+  try{
+    const {error}=await sb.auth.signInWithOAuth({
+      provider:"google",
+      options:{redirectTo:location.origin+"/dashboard/",skipBrowserRedirect:false}
+    });
+    if(error)throw error;
+  }catch(err){
+    googleSlot.disabled=false;
+    if(label)label.textContent="Continue with Google";
+    showMessage(err.message||"Google sign-in could not start. Please try again.");
+  }
+});
 const googleScript=document.getElementById("agrolyst-gsi");if(window.google?.accounts?.id)mountGoogleButton();else googleScript?.addEventListener("load",mountGoogleButton,{once:true});
 sb.auth.getSession().then(({data})=>{if(data.session)location.replace("/dashboard/")});
 </script>
