@@ -133,7 +133,7 @@ let mode="signup";
 function showMessage(text,kind="error"){message.textContent=text;message.className="message "+kind}
 document.getElementById("toggle-password").addEventListener("click",()=>{const p=document.getElementById("password"),b=document.getElementById("toggle-password");p.type=p.type==="password"?"text":"password";b.textContent=p.type==="password"?"Show password":"Hide password"});
 document.getElementById("switch-link").addEventListener("click",e=>{e.preventDefault();location.href="/login/"});
-form.addEventListener("submit",async e=>{e.preventDefault();submit.disabled=true;submit.querySelector("span").textContent="Creating account…";message.className="message";try{const email=document.getElementById("email").value.trim(),password=document.getElementById("password").value;const result=await sb.auth.signUp({email,password,options:{emailRedirectTo:location.origin+"/dashboard/"}});if(result.error)throw result.error;if(!result.data.session){showMessage("Account created. Check your email to confirm your address, then sign in.","success");submit.querySelector("span").textContent="Account created";return}location.href="/dashboard/"}catch(err){showMessage(err.message||"Unable to continue. Please try again.");submit.disabled=false;submit.querySelector("span").textContent="Create account"}});
+form.addEventListener("submit",async e=>{e.preventDefault();submit.disabled=true;submit.querySelector("span").textContent="Creating account…";message.className="message";try{const email=document.getElementById("email").value.trim(),password=document.getElementById("password").value;const result=await sb.auth.signUp({email,password,options:{emailRedirectTo:location.origin+"/dashboard.html"}});if(result.error)throw result.error;if(!result.data.session){showMessage("Account created. Check your email to confirm your address, then sign in.","success");submit.querySelector("span").textContent="Account created";return}location.href="/dashboard.html"}catch(err){showMessage(err.message||"Unable to continue. Please try again.");submit.disabled=false;submit.querySelector("span").textContent="Create account"}});
 const googleSlot=document.getElementById("google-button-slot");
 let googleRawNonce="";
 async function createGoogleNonce(){
@@ -158,7 +158,7 @@ async function mountGoogleButton(){
     if(!response?.credential)throw new Error("Google did not return an account credential.");
     const {error}=await sb.auth.signInWithIdToken({provider:"google",token:response.credential,nonce:googleRawNonce});
     if(error)throw error;
-    location.href="/dashboard/";
+    location.href="/dashboard.html";
    }catch(err){showMessage(err.message||"Google sign-in failed. Please try again.");}
   }
  });
