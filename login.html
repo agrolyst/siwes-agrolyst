@@ -66,9 +66,10 @@ a{color:inherit}
 .forgot-row{text-align:right;margin-top:-5px;margin-bottom:17px}
 .divider{display:flex;align-items:center;gap:12px;color:#929c93;font-size:9px;margin:18px 0}
 .divider:before,.divider:after{content:"";height:1px;flex:1;background:#e5ebe2}
-.google-slot{min-height:43px;width:100%;display:flex;align-items:center;justify-content:center;border:1px solid #dce5da;border-radius:8px;background:#fff;overflow:hidden}
-.google-slot:empty{display:none}
-.google-slot button{max-width:100%}
+.google-slot{min-height:46px;width:100%;display:flex;align-items:center;justify-content:center;gap:11px;border:1px solid #d5dfd4;border-radius:9px;background:#fff;color:#26372b;font:750 12px "DM Sans",sans-serif;cursor:pointer;transition:background .2s,border-color .2s,transform .2s}
+.google-slot:hover{background:#f8fbf7;border-color:#a8c3a6;transform:translateY(-1px)}
+.google-slot:disabled{opacity:.65;cursor:wait;transform:none}
+.google-slot svg{flex:none}
 .account-switch{text-align:center;color:#7d887f;font-size:10px;margin:29px 0 24px}
 .account-switch a{font-weight:800;color:#1c7741;text-decoration:none}
 .account-switch a:hover{text-decoration:underline}
@@ -117,7 +118,7 @@ a{color:inherit}
     <button class="primary" id="submit" type="submit"><span>Sign in</span><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></button>
   </form>
   <div class="divider"><span>or continue with</span></div>
-  <div class="google-slot" id="google-button-slot" aria-label="Continue with Google"></div>
+  <button class="google-slot" id="google-button-slot" type="button" aria-label="Continue with Google"><svg viewBox="0 0 48 48" aria-hidden="true" width="18" height="18"><path fill="#4285F4" d="M43.6 24.5c0-1.4-.1-2.8-.4-4.1H24v7.8h11a9.4 9.4 0 0 1-4.1 6.2v5.1h6.6c3.9-3.6 6.1-8.9 6.1-15z"/><path fill="#34A853" d="M24 44c5.5 0 10.1-1.8 13.5-4.8l-6.6-5.1c-1.8 1.2-4.1 2-6.9 2-5.3 0-9.8-3.6-11.4-8.4H5.8v5.3A20 20 0 0 0 24 44z"/><path fill="#FBBC05" d="M12.6 27.7a12 12 0 0 1 0-7.4V15H5.8a20 20 0 0 0 0 18z"/><path fill="#EA4335" d="M24 11.9c3 0 5.6 1 7.7 3l5.8-5.8C34 5.8 29.4 4 24 4A20 20 0 0 0 5.8 15l6.8 5.3c1.6-4.8 6.1-8.4 11.4-8.4z"/></svg><span>Continue with Google</span></button>
   <p class="account-switch"><span id="switch-label">New to Agrolyst SIWES?</span> <a href="/signup/" id="switch-link">Create an account</a></p>
   <p class="legal">By continuing, you agree to our <a href="/agreement/">Terms of Service</a> and acknowledge our <a href="/privacy/">Privacy Policy</a>.</p>
 </div>
@@ -134,7 +135,8 @@ document.getElementById("toggle-password").addEventListener("click",()=>{const p
 document.getElementById("switch-link").addEventListener("click",async e=>{e.preventDefault();if(mode==="login"){location.href="/signup/";return}location.href="/login/"});
 form.addEventListener("submit",async e=>{e.preventDefault();submit.disabled=true;submit.querySelector("span").textContent=mode==="signup"?"Creating account…":"Signing in…";message.className="message";try{const email=document.getElementById("email").value.trim(),password=document.getElementById("password").value;let result;if(mode==="signup"){result=await sb.auth.signUp({email,password,options:{data:{full_name:""},emailRedirectTo:location.origin+"/dashboard/"}})}else{result=await sb.auth.signInWithPassword({email,password})}if(result.error)throw result.error;if(mode==="signup"&&!result.data.session){showMessage("Account created. Check your email to confirm your address, then sign in.","success");submit.querySelector("span").textContent="Account created";return}location.href="/dashboard/"}catch(err){showMessage(err.message||"Unable to continue. Please try again.");submit.disabled=false;submit.querySelector("span").textContent=mode==="signup"?"Create account":"Sign in"}});
 const googleSlot=document.getElementById("google-button-slot");
-function mountGoogleButton(){if(!window.google?.accounts?.id||!googleSlot)return;google.accounts.id.initialize({client_id:"984810017292-kq5s86cprnf39paraa7772c66uomml3n.apps.googleusercontent.com",use_fedcm_for_prompt:true,auto_select:false,callback:async response=>{try{if(!response?.credential)throw new Error("Google did not return an account credential.");const{error}=await sb.auth.signInWithIdToken({provider:"google",token:response.credential});if(error)throw error;location.href="/dashboard/"}catch(err){showMessage(err.message||"Google sign-in failed. Please try again.")}}});google.accounts.id.renderButton(googleSlot,{type:"standard",theme:"outline",size:"large",text:"continue_with",shape:"rectangular",logo_alignment:"left",width:350})}
+let googleReady=false,googlePromptOpen=false;
+function mountGoogleButton(){if(!window.google?.accounts?.id||!googleSlot||googleReady)return;google.accounts.id.initialize({client_id:"984810017292-kq5s86cprnf39paraa7772c66uomml3n.apps.googleusercontent.com",use_fedcm_for_prompt:true,auto_select:false,callback:async response=>{try{if(!response?.credential)throw new Error("Google did not return an account credential.");googleSlot.disabled=true;showMessage("Google account received. Signing you in…","success");const{error}=await sb.auth.signInWithIdToken({provider:"google",token:response.credential});if(error)throw error;location.href="/dashboard/"}catch(err){googleSlot.disabled=false;showMessage(err.message||"Google sign-in failed. Please try again.")}}});googleReady=true;googleSlot.addEventListener("click",()=>{if(!window.google?.accounts?.id){showMessage("Google sign-in is still loading. Please try again.");return}if(googlePromptOpen)return;googlePromptOpen=true;message.className="message";google.accounts.id.prompt(notification=>{googlePromptOpen=false;if(notification.isNotDisplayed?.()||notification.isSkippedMoment?.()){showMessage("Google’s on-page account prompt is unavailable in this browser or session. Try again or use email and password sign-in.")}})})}
 const googleScript=document.getElementById("agrolyst-gsi");if(window.google?.accounts?.id)mountGoogleButton();else googleScript?.addEventListener("load",mountGoogleButton,{once:true});
 sb.auth.getSession().then(({data})=>{if(data.session)location.replace("/dashboard/")});
 </script>
