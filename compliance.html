@@ -761,7 +761,7 @@ async function getPrivateAccessToken(forceRefresh=false){
   if(latest.error)currentError=latest.error;
  }catch(error){currentError=error}
  console.warn("The SIWES page could not refresh the Supabase session.",currentError?.message||currentError||"No active session");
- throw new Error("Your login session could not be refreshed. Please sign in again, then reopen My application. Your saved application progress is preserved.");
+ throw new Error("Your login session could not be refreshed. Please sign in at /login/, then return to My application. Previously saved sections remain saved.");
 }
 async function checkPrivateContactAvailability(applicationId,email,phone){
  const cleanEmail=String(email||"").trim().toLowerCase();
@@ -779,7 +779,7 @@ async function checkPrivateContactAvailability(applicationId,email,phone){
   response=await request();
  }
  let result={};try{result=await response.json();}catch{}
- if(response.status===401)throw new Error("Your login session is no longer valid. Please sign in again, then reopen My application. Your saved application progress is preserved.");
+ if(response.status===401)throw new Error("Your login session is no longer valid. Please sign in at /login/, then return to My application. Previously saved sections remain saved.");
  if(!response.ok||result.ok!==true)throw new Error(result.error||"We could not verify your email and phone number. Please try again.");
  if(result.email_available===false)throw new Error(result.email_error||"This email address has already been used for another SIWES application.");
  if(result.phone_available===false)throw new Error(result.phone_error||"This phone number has already been used for another SIWES application.");
