@@ -717,8 +717,8 @@ window.AgrolystApp.sidebar=function(name,active){
  const fullName=user?.user_metadata?.full_name||user?.user_metadata?.name||name||"Applicant";
  const email=user?.email||"Applicant account";
  const initials=fullName.split(" ").filter(Boolean).slice(0,2).map(part=>part[0]).join("").toUpperCase()||"A";
- const photo=user?.user_metadata?.avatar_url||user?.user_metadata?.picture||user?.user_metadata?.profile_image_url||user?.user_metadata?.photo_url||"";
- const avatar=photo?'<img class="dash-avatar" src="'+esc(photo)+'" alt="'+esc(fullName)+' profile photo" referrerpolicy="no-referrer">':'<div class="dash-avatar" aria-hidden="true">'+esc(initials)+'</div>';
+ const photo=user?.user_metadata?.avatar_url||user?.user_metadata?.picture||user?.user_metadata?.profile_image_url||user?.user_metadata?.photo_url||user?.user_metadata?.avatar||user?.user_metadata?.photo||user?.user_metadata?.image||"";
+ const avatar=photo?'<img class="dash-avatar" src="'+esc(photo)+'" alt="'+esc(fullName)+' profile photo" referrerpolicy="no-referrer" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><div class="dash-avatar" aria-hidden="true" hidden>'+esc(initials)+'</div>':'<div class="dash-avatar" aria-hidden="true">'+esc(initials)+'</div>';
  const item=(key,href,label,icon)=>'<a class="dash-nav '+(active===key?'active':'')+'" href="'+href+'" '+(active===key?'aria-current="page"':'')+'>'+icon+'<span>'+label+'</span></a>';
  const icons={
   overview:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>',
