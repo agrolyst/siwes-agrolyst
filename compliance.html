@@ -732,12 +732,12 @@ async function getPrivatePhoneE164(form){
   throw new Error(error);
  }
  const phone=compliancePhoneWidget.getNumber();
- if(!/^\\+[1-9]\\d{6,14}$/.test(phone))throw new Error("The phone number could not be converted to international format. Check the country code and number.");
+ if(!/^\+[1-9]\d{6,14}$/.test(phone))throw new Error("The phone number could not be converted to international format. Check the country code and number.");
  return phone;
 }
 async function checkPrivateContactAvailability(applicationId,email,phone){
  const cleanEmail=String(email||"").trim().toLowerCase();
- if(!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]{2,}$/.test(cleanEmail))throw new Error("Enter a valid email address before continuing.");
+ if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(cleanEmail))throw new Error("Enter a valid email address before continuing.");
  const {data:authData,error:sessionError}=await sb.auth.getSession();
  const accessToken=authData?.session?.access_token;
  if(sessionError||!accessToken)throw new Error("Your session has expired. Please sign in again.");
