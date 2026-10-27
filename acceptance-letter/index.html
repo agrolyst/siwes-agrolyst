@@ -51,15 +51,11 @@ try{
  if(templateError)throw templateError;
  if(!template?.html_template){status.classList.remove("hidden");status.innerHTML='<h2>Acceptance letter template unavailable</h2><p>The approved template could not be loaded. Please contact the SIWES administrator.</p>';throw new Error("TEMPLATE_NOT_FOUND")}
  const values={
-  logo_url:logoUrl,company_name:"AGROLYST INTEGRATED FARMS AND SERVICES",programme_name:"Student Industrial Work Experience Scheme",
-  reference_no:app.reference_no,letter_number:app.acceptance_letter_number,letter_title:template.subject||template.title||"Acceptance Letter for Industrial Training",
-  issue_date:stamp(app.acceptance_letter_issued_at),student_name:app.full_name,institution:app.institution,course_of_study:app.course_of_study,
-  training_area:app.training_area,duration:app.duration,start_date:prettyDate(app.start_date),end_date:prettyDate(app.end_date),
-  acceptance_paragraph:"We are pleased to confirm that Agrolyst Integrated Farms and Services has approved your application for student industrial training, subject to your institution’s SIWES requirements and any onboarding instructions from our team.",
-  student_instructions:"Submit this letter to your institution or SIWES coordinator for any required approval. Confirm your resumption date with Agrolyst before reporting. Bring any school documents required and follow the supervised training, orientation and logbook instructions provided.",
-  institution_notice:"This letter does not replace separate institutional authorisation your school may require.",
-  signatory_line:"For: Agrolyst Integrated Farms and Services",signatory_title:"SIWES / Student Training Office",
-  tagline:"Market to Farm. Empowering Farmers. Growing the Future.",footer_note:"Issued electronically through the Agrolyst SIWES portal."
+  logo_url:logoUrl,reference_no:app.reference_no,letter_number:app.acceptance_letter_number,
+  letter_title:template.subject||template.title||"Acceptance Letter for Industrial Training",
+  issue_date:stamp(app.acceptance_letter_issued_at),student_name:app.full_name,institution:app.institution,
+  course_of_study:app.course_of_study,training_area:app.training_area,duration:app.duration,
+  start_date:prettyDate(app.start_date),end_date:prettyDate(app.end_date)
  };
  const html=template.html_template.replace(/{{\\s*([a-z_]+)\\s*}}/g,(_,key)=>key==="logo_url"?escapeHtml(values[key]):escapeHtml(values[key]??""));
  document.getElementById("letter-content").innerHTML=html;
