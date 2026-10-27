@@ -748,15 +748,15 @@ async function loadDashboardProfilePhoto(){
    .order("uploaded_at",{ascending:false})
    .limit(1);
   if(error){console.warn("Could not retrieve your passport photo for the dashboard profile.",error);return}
-  const document=documents?.[0];
-  if(!document?.storage_path)return;
-  const {data:signed,error:signError}=await sb.storage.from("siwes-private").createSignedUrl(document.storage_path,3600);
+  const photoDocument=documents?.[0];
+  if(!photoDocument?.storage_path)return;
+  const {data:signed,error:signError}=await sb.storage.from("siwes-private").createSignedUrl(photoDocument.storage_path,3600);
   if(signError||!signed?.signedUrl){if(signError)console.warn("Could not create a private profile-photo URL.",signError);return}
   const profile=host.querySelector(".dash-profile");
   if(!profile)return;
   const fullName=user.user_metadata?.full_name||user.user_metadata?.name||user.email||"Applicant";
   const initials=fullName.split(" ").filter(Boolean).slice(0,2).map(part=>part[0]).join("").toUpperCase()||"A";
-  const image=documentCreateImage();
+  const image=document.createElement("img");
   image.className="dash-avatar";
   image.alt=fullName+" profile photo";
   image.referrerPolicy="no-referrer";
@@ -772,7 +772,6 @@ async function loadDashboardProfilePhoto(){
   profile.insertBefore(image,profile.firstChild);
  }catch(error){console.warn("Dashboard profile photo could not be loaded.",error)}
 }
-function documentCreateImage(){return window.document.createElement("img")}
 async function dashboard(){
  if(!user){loginNotice();return}
  const firstName=esc((user.user_metadata?.full_name||user.user_metadata?.name||user.email||"Applicant").split(/[ @]/)[0]);
