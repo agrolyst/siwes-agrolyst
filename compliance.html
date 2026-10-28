@@ -832,7 +832,7 @@ function showAuthRecovery(id){
  target.replaceChildren();
  target.append(document.createTextNode("Your login session has expired or was revoked. Previously saved sections remain saved. "));
  const link=document.createElement("a");
- link.href="/login/?force=1&next="+encodeURIComponent(location.pathname+location.search);
+ link.href="/login/?auth=magic&force=1&next="+encodeURIComponent(location.pathname+location.search);
  link.textContent="Sign in again and return here";
  link.style.fontWeight="800";
  link.style.color="inherit";
