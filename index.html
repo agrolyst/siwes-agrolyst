@@ -836,7 +836,7 @@ async function dashboard(){
   const a=await getApp(),el=document.getElementById("dc");
   if(!a){
    const signupIntent=user.user_metadata?.signup_intent==="public_application_link";
-   if(signupIntent||["no_matching_application","already_linked","multiple_matching_applications","link_conflict"].includes(publicLinkResult?.reason)||publicLinkResult?.reason==="email_not_verified"){
+   if(signupIntent||["already_linked","multiple_matching_applications","link_conflict"].includes(publicLinkResult?.reason)||publicLinkResult?.reason==="email_not_verified"){
     const help=document.createElement("section");help.className="dash-public-link-help";
     const mark=document.createElement("div");mark.className="help-mark";mark.textContent="↗";
     const body=document.createElement("div");
