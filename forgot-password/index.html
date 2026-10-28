@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#103d2b">
+<meta name="description" content="Reset your password for the Agrolyst SIWES applicant portal.">
+<link rel="icon" type="image/png" href="/agrolystfarmslogo.png">
+<link rel="shortcut icon" type="image/png" href="/agrolystfarmslogo.png">
+<link rel="apple-touch-icon" href="/agrolystfarmslogo.png">
+<title>Reset Password | Agrolyst SIWES Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:light;--forest:#103d2b;--green:#1e6842;--lime:#d8edaa;--ink:#183327;--muted:#748077;--line:#e0e8df;--paper:#f4f7f0}
+*{box-sizing:border-box}
+html{min-height:100%;background:var(--paper)}
+body{margin:0;min-height:100vh;padding:28px clamp(14px,4vw,54px);display:grid;place-items:center;font-family:"DM Sans",sans-serif;color:var(--ink);background:radial-gradient(ellipse at 8% 12%,#e0ebd9 0,transparent 35%),radial-gradient(ellipse at 95% 90%,#e5eedf 0,transparent 32%),var(--paper);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+button,input{font:inherit}
+.auth-shell{width:min(1240px,100%);min-height:min(650px,calc(100vh - 56px));display:grid;grid-template-columns:minmax(0,1.12fr) minmax(380px,.88fr);border:1px solid #dce6da;border-radius:23px;overflow:hidden;background:#fff;box-shadow:0 28px 90px #123d2b17,0 4px 18px #123d2b08;animation:rise .7s cubic-bezier(.2,.7,.2,1) both}
+.brand-panel{position:relative;isolation:isolate;display:flex;flex-direction:column;justify-content:space-between;gap:30px;overflow:hidden;padding:clamp(30px,4.5vw,56px);color:#fff;background:#103d2b}
+.brand-panel:before{content:"";position:absolute;z-index:-2;inset:0;background:url("https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?auto=format&fit=crop&w=1800&q=90") center/cover no-repeat;transform:scale(1.04);animation:photoIn 1.2s ease-out both}
+.brand-panel:after{content:"";position:absolute;z-index:-1;inset:0;background:linear-gradient(115deg,#073421df 0%,#0a432fd1 39%,#0a3928bd 70%,#0b3025c9 100%),radial-gradient(circle at 80% 12%,#d8edaa25,transparent 24%);pointer-events:none}
+.brand-lockup{display:flex;align-items:center;gap:12px;position:relative;z-index:1}
+.brand-lockup img{width:52px;height:52px;padding:4px;object-fit:contain;border-radius:12px;background:white;border:1px solid #ffffffba;box-shadow:0 7px 22px #001c1040}
+.brand-name{font:800 15px/1.2 Manrope,sans-serif;letter-spacing:1.8px}
+.brand-name small{display:block;margin-top:5px;font:750 8px/1.4 "DM Sans",sans-serif;letter-spacing:1.35px;color:#d6e3d8}
+.story-copy{position:relative;z-index:1;max-width:560px;margin:auto 0;padding:42px 0 50px}
+.story-kicker{display:flex;align-items:center;gap:9px;color:#e0e9b1;font-size:10px;font-weight:850;letter-spacing:1.45px;text-transform:uppercase;margin-bottom:22px}
+.story-kicker:before{content:"";width:11px;height:11px;border:1px solid #d8edaa;border-radius:50%;box-shadow:inset 0 0 0 3px #103d2b;background:#d8edaa}
+.story-copy h1{font:800 clamp(43px,5.2vw,66px)/1.03 Manrope,sans-serif;letter-spacing:-2.9px;color:#fff;margin:0 0 21px;max-width:540px}
+.story-copy h1 em{font-style:normal;color:#e6d98e}
+.story-copy p{max-width:440px;color:#e4eee7;font-size:14px;line-height:1.85;margin:0}
+.benefits{display:flex;flex-wrap:wrap;gap:9px;margin-top:25px}
+.benefit{display:flex;align-items:center;gap:8px;padding:9px 12px;border:1px solid #ffffff45;border-radius:999px;background:#ffffff0c;color:#eef5ec;font-size:10px;font-weight:650;backdrop-filter:blur(7px)}
+.benefit svg{width:14px;height:14px;stroke:#e4e6a3;flex:none}
+.story-footer{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;color:#d6e4d8;font-size:9px;font-weight:750;letter-spacing:.2px;position:relative;z-index:1}
+.story-footer strong{color:#ebd985}
+.form-panel{display:flex;align-items:center;justify-content:center;padding:clamp(28px,4vw,54px);background:linear-gradient(180deg,#fff 0%,#fcfdfb 100%)}
+.form-inner{width:100%;max-width:410px}
+.form-heading-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:28px}
+.mini-brand{display:flex;align-items:center;gap:9px}
+.mini-brand img{width:36px;height:36px;object-fit:contain}
+.mini-brand strong{display:block;font:850 10px Manrope,sans-serif;letter-spacing:1.3px;color:#214734}
+.mini-brand small{display:block;font-size:7px;letter-spacing:.7px;color:#7b897e;margin-top:3px}
+.secure-label{display:flex;gap:6px;align-items:center;color:#7d8d80;font-size:9px;white-space:nowrap}
+.secure-label svg{width:13px;height:13px;stroke:#2b8952}
+.form-inner h2{font:800 clamp(28px,3vw,36px)/1.15 Manrope,sans-serif;letter-spacing:-1.35px;margin:0 0 9px;color:#173e2c}
+.intro{margin:0 0 25px;color:var(--muted);font-size:12px;line-height:1.7}
+.field{display:block;margin-bottom:16px}
+.field label{display:block;font-size:11px;font-weight:800;margin-bottom:8px;color:#34483a}
+.input-wrap{position:relative}
+.input-wrap svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);width:16px;height:16px;stroke:#839086;pointer-events:none}
+.field input{width:100%;height:49px;border:1px solid #d9e4d8;border-radius:10px;background:#fafcf9;padding:0 14px 0 42px;font:500 12px "DM Sans",sans-serif;color:#1b3827;outline:none;transition:border .2s,box-shadow .2s,background .2s}
+.field input::placeholder{color:#8d978e}
+.field input:focus{border-color:#347b50;background:#fff;box-shadow:0 0 0 4px #286c4215}
+.field .hint{display:block;font-size:10px;line-height:1.55;color:#7d897d;margin-top:7px}
+.primary{width:100%;min-height:49px;border:0;border-radius:10px;display:flex;align-items:center;justify-content:center;gap:10px;background:linear-gradient(105deg,#0c432c,#1e6842 67%,#237c4b);color:#fff;font:800 12px Manrope,sans-serif;cursor:pointer;box-shadow:0 9px 21px #123d2b22;transition:transform .2s,box-shadow .2s,opacity .2s}
+.primary:hover{transform:translateY(-1px);box-shadow:0 13px 25px #123d2b2c}
+.primary:disabled{opacity:.65;cursor:wait;transform:none}
+.primary svg{width:15px;height:15px;stroke:currentColor}
+.back-link{display:flex;align-items:center;justify-content:center;gap:8px;color:#287747;text-decoration:none;font-size:11px;font-weight:800;margin-top:21px}
+.back-link:hover{text-decoration:underline}
+.message{display:none;border-radius:9px;padding:11px 12px;margin:0 0 15px;font-size:11px;line-height:1.65}
+.message.error,.message.success,.message.info{display:block}
+.message.error{background:#fff0ed;color:#a12c1e;border:1px solid #f3d0c8}
+.message.success{background:#eef8ed;color:#23613a;border:1px solid #d5e9d2}
+.message.info{background:#eef4ea;color:#244d32;border:1px solid #dce8d8}
+.form-footnote{font-size:9px;line-height:1.65;color:#89948a;margin:25px 0 0;text-align:center}
+.form-footnote a{color:#3c6c4d;text-decoration:underline;text-underline-offset:2px}
+#reset-fields[hidden],#request-fields[hidden]{display:none!important}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes photoIn{from{transform:scale(1.09);filter:saturate(.7)}to{transform:scale(1.04);filter:saturate(1)}}
+@media(max-width:860px){body{padding:16px}.auth-shell{grid-template-columns:1fr;max-width:560px;min-height:0}.brand-panel{min-height:315px;padding:26px}.story-copy{padding:30px 0 25px}.story-copy h1{font-size:39px;letter-spacing:-1.5px}.story-copy p{font-size:12px}.benefits{margin-top:17px}.story-footer{font-size:8px}.form-panel{padding:30px 26px 34px}}
+@media(max-width:480px){body{padding:8px}.auth-shell{border-radius:17px}.brand-panel{min-height:0;padding:21px}.brand-lockup img{width:44px;height:44px}.story-copy{padding:24px 0 20px}.story-copy h1{font-size:32px;letter-spacing:-1.1px;margin-bottom:13px}.story-copy p{font-size:11px;line-height:1.7}.benefits{gap:6px}.benefit{font-size:9px;padding:7px 9px}.story-footer{gap:8px}.form-panel{padding:25px 19px 28px}.form-heading-row{margin-bottom:24px}.form-inner h2{font-size:28px}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<main class="auth-shell">
+<aside class="brand-panel" aria-label="Agrolyst SIWES password recovery">
+  <div class="brand-lockup"><img src="/agrolystfarmslogo.png" alt="Agrolyst logo"><div class="brand-name">AGROLYST<small>INTEGRATED FARMS AND SERVICES</small></div></div>
+  <div class="story-copy">
+    <div class="story-kicker">SECURE ACCOUNT RECOVERY</div>
+    <h1>Get back to<br><em>your journey.</em></h1>
+    <p>Reset your password securely and return to your Agrolyst SIWES applicant workspace. Your application progress remains linked to your account.</p>
+    <div class="benefits">
+      <span class="benefit"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Secure reset link</span>
+      <span class="benefit"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="M4 12a8 8 0 1 0 2.34-5.66L4 8.5"/><path d="M4 4v4.5h4.5"/></svg>Simple recovery process</span>
+      <span class="benefit"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><path d="m12 3 8 3v5c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6z"/><path d="m8.5 12 2.2 2.2 4.8-5"/></svg>Protected access</span>
+    </div>
+  </div>
+  <div class="story-footer"><span>Market to Farm. Empowering Farmers.</span><strong>Growing the Future.</strong></div>
+</aside>
+<section class="form-panel">
+<div class="form-inner">
+  <div class="form-heading-row">
+    <div class="mini-brand"><img src="/agrolystfarmslogo.png" alt=""><span><strong>AGROLYST FARMS</strong><small>INTEGRATED FARMS AND SERVICES</small></span></div>
+    <span class="secure-label"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v3"/></svg>Secure recovery</span>
+  </div>
+  <h2 id="page-title">Forgot your password?</h2>
+  <p class="intro" id="page-intro">Enter the email address linked to your SIWES account. We’ll send you a secure password reset link if recovery is available for that address.</p>
+  <div class="message" id="message" role="status" aria-live="polite"></div>
+  <form id="request-form">
+    <div id="request-fields">
+      <div class="field"><label for="email">Account email address</label><div class="input-wrap"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg><input id="email" name="email" type="email" autocomplete="email" inputmode="email" placeholder="you@example.com" maxlength="254" required></div><span class="hint">Check your inbox and spam folder for the recovery email.</span></div>
+      <button class="primary" id="send-link" type="submit"><span>Send reset link</span><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></button>
+    </div>
+    <div id="reset-fields" hidden>
+      <div class="field"><label for="new-password">New password</label><div class="input-wrap"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><rect x="3" y="10" width="18" height="11" rx="2"/><path d="M7 10V7a5 5 0 0 1 10 0v3"/></svg><input id="new-password" name="new-password" type="password" autocomplete="new-password" minlength="8" placeholder="At least 8 characters"></div><span class="hint">Use at least 8 characters and avoid reusing an old password.</span></div>
+      <div class="field"><label for="confirm-password">Confirm new password</label><div class="input-wrap"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8"><rect x="3" y="10" width="18" height="11" rx="2"/><path d="M7 10V7a5 5 0 0 1 10 0v3"/></svg><input id="confirm-password" name="confirm-password" type="password" autocomplete="new-password" minlength="8" placeholder="Enter the new password again"></div></div>
+      <button class="primary" id="save-password" type="button"><span>Update password</span><svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="m5 12 4 4L19 6"/></svg></button>
+    </div>
+  </form>
+  <a class="back-link" href="/login/"><span aria-hidden="true">←</span> Back to sign in</a>
+  <p class="form-footnote">For your security, never share a reset link or verification code with anyone. <a href="/privacy/">Privacy Policy</a></p>
+</div>
+</section>
+</main>
+<script type="module">
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
+
+const SUPABASE_URL="https://orhlccyodjuhwoaelmyd.supabase.co";
+const SUPABASE_KEY="sb_publishable_3HEzwj5aGJx3VOQD7l8jwQ_MngS3dcK";
+const sb=createClient(SUPABASE_URL,SUPABASE_KEY,{auth:{autoRefreshToken:true,persistSession:true,detectSessionInUrl:true}});
+const requestForm=document.getElementById("request-form");
+const emailInput=document.getElementById("email");
+const sendButton=document.getElementById("send-link");
+const updateButton=document.getElementById("save-password");
+const requestFields=document.getElementById("request-fields");
+const resetFields=document.getElementById("reset-fields");
+const message=document.getElementById("message");
+const title=document.getElementById("page-title");
+const intro=document.getElementById("page-intro");
+let mode="request";
+let recoverySessionReady=false;
+
+function showMessage(text,kind="error"){message.textContent=text;message.className="message "+kind;}
+function setMode(nextMode){
+ mode=nextMode;
+ const isReset=mode==="reset";
+ requestFields.hidden=isReset;
+ resetFields.hidden=!isReset;
+ title.textContent=isReset?"Choose a new password":"Forgot your password?";
+ intro.textContent=isReset
+  ?"Create a new password for your Agrolyst SIWES account, then sign in again."
+  ?"Enter the email address linked to your SIWES account. We’ll send you a secure password reset link if recovery is available for that address."
+  :"";
+ message.className="message";
+}
+function callbackLooksLikeRecovery(){
+ const params=new URLSearchParams(location.search);
+ const hash=new URLSearchParams(location.hash.replace(/^#/,""));
+ return params.get("type")==="recovery"||hash.get("type")==="recovery"||params.has("code");
+}
+
+sb.auth.onAuthStateChange((event,session)=>{
+ if(event==="PASSWORD_RECOVERY"||(callbackLooksLikeRecovery()&&session?.user)){
+  recoverySessionReady=true;
+  setMode("reset");
+  showMessage("Recovery verified. Choose a new password below.","info");
+ }
+});
+
+if(callbackLooksLikeRecovery()){
+ // Supabase exchanges the code/hash for a recovery session. The listener above
+ // switches to the new-password form after the session is available.
+ const {data}=await sb.auth.getSession();
+ if(data?.session){
+  recoverySessionReady=true;
+  setMode("reset");
+  showMessage("Recovery verified. Choose a new password below.","info");
+ }
+}
+
+requestForm.addEventListener("submit",async event=>{
+ event.preventDefault();
+ if(mode!=="request")return;
+ if(!requestForm.reportValidity())return;
+ const email=emailInput.value.trim().toLowerCase();
+ sendButton.disabled=true;
+ sendButton.querySelector("span").textContent="Sending reset link…";
+ message.className="message";
+ try{
+  const redirectTo=new URL("/forgot-password/",location.origin).toString();
+  const {error}=await sb.auth.resetPasswordForEmail(email,{redirectTo});
+  if(error)throw error;
+  showMessage("If an account exists for this email, a password reset link has been sent. Check your inbox and spam folder. The link will return you here to choose a new password.","success");
+  sendButton.querySelector("span").textContent="Reset link requested";
+ }catch(error){
+  showMessage(error?.message||"We could not send a reset link right now. Please try again.");
+  sendButton.disabled=false;
+  sendButton.querySelector("span").textContent="Send reset link";
+ }
+});
+
+updateButton.addEventListener("click",async()=>{
+ const password=document.getElementById("new-password").value;
+ const confirmation=document.getElementById("confirm-password").value;
+ if(!recoverySessionReady){showMessage("Open the password-reset link from your email on this page before choosing a new password.");return;}
+ if(password.length<8){showMessage("Use a password with at least 8 characters.");return;}
+ if(password!==confirmation){showMessage("The passwords do not match. Please re-enter them.");return;}
+ updateButton.disabled=true;
+ updateButton.querySelector("span").textContent="Updating password…";
+ message.className="message";
+ try{
+  const {error}=await sb.auth.updateUser({password});
+  if(error)throw error;
+  showMessage("Your password has been updated. You can now sign in with your new password.","success");
+  updateButton.querySelector("span").textContent="Password updated";
+  document.getElementById("new-password").value="";
+  document.getElementById("confirm-password").value="";
+  recoverySessionReady=false;
+ }catch(error){
+  showMessage(error?.message||"We could not update your password. Request a new reset link and try again.");
+  updateButton.disabled=false;
+  updateButton.querySelector("span").textContent="Update password";
+ }
+});
+</script>
+</body>
+</html>
