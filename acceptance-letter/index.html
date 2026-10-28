@@ -40,8 +40,13 @@ try{
  if(!session){status.innerHTML='<h2>Sign in required</h2><p>Please sign in to the Agrolyst SIWES portal to view your application and acceptance letter.</p><a class="btn" href="/login/">Sign in</a>';document.getElementById("applicant-sidebar").classList.add("hidden");document.querySelector(".dash-shell").style.gridTemplateColumns="minmax(0,1fr)";throw new Error("AUTH_REQUIRED")}
  const fullName=session.user.user_metadata?.full_name||session.user.user_metadata?.name||session.user.email||"Applicant";
  document.getElementById("applicant-sidebar").innerHTML=window.AgrolystApp.sidebar(session.user,"letters");window.agrolystSupabase=supabase;window.AgrolystApp.loadProfilePhoto(session.user);document.getElementById("signout").addEventListener("click",async()=>{const button=document.getElementById("signout");button.disabled=true;button.querySelector("span").textContent="Signing out…";const{error}=await supabase.auth.signOut();if(error){button.disabled=false;button.querySelector("span").textContent="Sign out";status.classList.remove("hidden");status.innerHTML="<h2>Could not sign out</h2><p>Please try again.</p>";return}location.href="/"});
- const {data:app,error}=await supabase.from("siwes_applications").select("*").eq("user_id",session.user.id).order("created_at",{ascending:false}).limit(1).maybeSingle();
+ let {data:app,error}=await supabase.from("siwes_applications").select("*").eq("user_id",session.user.id).eq("status","acceptance_letter_issued").not("acceptance_letter_number","is",null).not("acceptance_letter_issued_at","is",null).order("acceptance_letter_issued_at",{ascending:false}).limit(1).maybeSingle();
  if(error)throw error;
+ if(!app){
+  const latestResult=await supabase.from("siwes_applications").select("*").eq("user_id",session.user.id).order("created_at",{ascending:false}).limit(1).maybeSingle();
+  if(latestResult.error)throw latestResult.error;
+  app=latestResult.data;
+ }
  if(!app){status.innerHTML='<h2>No application found</h2><p>You have not started a SIWES application yet.</p><a class="btn" href="/compliance/">Start application</a>';throw new Error("NO_APPLICATION")}
  if(app.status!=="acceptance_letter_issued"||!app.acceptance_letter_number||!app.acceptance_letter_issued_at){
  status.innerHTML='<h2>Letter not yet available</h2><p>Your current application status is <strong>'+esc(app.status||"Not submitted")+'</strong>.</p><div class="notice">Complete your compliance submission and wait for an authorised reviewer to approve and formally issue your letter. An account or application alone does not generate an acceptance letter.</div><a class="btn" href="/dashboard/">Check application status</a>';
