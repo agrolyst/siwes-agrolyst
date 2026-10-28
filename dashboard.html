@@ -929,7 +929,7 @@ async function linkPublicApplication(session){
   return null;
  }catch(error){console.warn("Could not link a public SIWES application yet.",error);return null;}
 }
-async function init(){const{data:{session}}=await sb.auth.getSession();user=session?.user||null;if(session)await linkPublicApplication(session);const p=location.pathname.replace(/\/+$/,"")||"/";if(p==="/"||p==="/index.html")home();else if(p==="/login"){mode="login";login()}else if(p==="/signup"||p==="/register"){mode="signup";login()}else if(p==="/dashboard"||p==="/dashboard.html")dashboard();else if(p==="/compliance")compliance();else if(p==="/acceptance-letter")letter();else if(p==="/admin")admin();else if(p==="/privacy"||p==="/policy")privacy();else if(p==="/agreement")agreement();else home()}
+async function init(){const{data:{session}}=await sb.auth.getSession();user=session?.user||null;if(session)await linkPublicApplication(session);const p=location.pathname.replace(/\/+$/,"")||"/";if(p==="/"||p==="/index.html")home();else if(p==="/login"){mode="login";login();if(new URLSearchParams(location.search).get("mode")==="signup"){document.getElementById("switch")?.click()}}else if(p==="/signup"||p==="/register"){mode="login";login();document.getElementById("switch")?.click()}else if(p==="/dashboard"||p==="/dashboard.html")dashboard();else if(p==="/compliance")compliance();else if(p==="/acceptance-letter")letter();else if(p==="/admin")admin();else if(p==="/privacy"||p==="/policy")privacy();else if(p==="/agreement")agreement();else home()}
 function syncAuthNavigation(session){
  user=session?.user||null;
  const actions=document.querySelector(".nav-actions");
