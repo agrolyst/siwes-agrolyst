@@ -718,7 +718,11 @@ svg{vertical-align:middle}
 .wizard-panel .iti__search-input{width:calc(100% - 16px);margin:8px}
 .phone-hint{display:block;margin-top:6px;color:#647568;font-size:.76rem;line-height:1.55}
 .wizard-panel .iti--allow-dropdown input[type="tel"]:focus{outline-color:#1e6842}
-</style>
+.wizard-panel .phone-unavailable-field .iti{width:100%;max-width:100%}
+.wizard-panel .phone-unavailable-field .iti input#private-phone{background:#f3f6f1;color:#6e7c70;cursor:not-allowed;border-style:dashed}
+.wizard-panel .phone-unavailable-field .iti input#private-phone::placeholder{color:#788679;opacity:1}
+.wizard-panel .phone-unavailable-field .iti__selected-country{cursor:pointer}
+
 <style id="google-private-address-autocomplete">
 .address-autocomplete{position:relative;width:100%;min-width:0}
 .address-autocomplete textarea[aria-expanded="true"]{border-bottom-left-radius:7px;border-bottom-right-radius:7px}
@@ -748,22 +752,7 @@ const sb=createClient("https://orhlccyodjuhwoaelmyd.supabase.co","sb_publishable
 const PRIVATE_CONTACT_CHECK_URL="https://orhlccyodjuhwoaelmyd.supabase.co/functions/v1/public-siwes-applications";
 const PRIVATE_PUBLIC_API_KEY="sb_publishable_3HEzwj5aGJx3VOQD7l8jwQ_MngS3dcK";
 let compliancePhoneWidget=null;
-async function getPrivatePhoneE164(form){
- const input=form?.elements?.phone;
- if(!input)throw new Error("The phone number field is missing. Please refresh and try again.");
- if(!compliancePhoneWidget)throw new Error("The country-code phone selector did not load. Refresh the page or try another browser.");
- try{await compliancePhoneWidget.promise;}catch{throw new Error("Phone validation could not load. Check your internet connection and try again.");}
- if(!input.value.trim()){input.reportValidity();throw new Error("Enter your phone number before continuing.");}
- input.setCustomValidity("");
- if(!compliancePhoneWidget.isValidNumber()){
-  const error="Enter a valid phone number for the selected country code.";
-  input.setCustomValidity(error);input.reportValidity();input.focus();
-  throw new Error(error);
- }
- const phone=compliancePhoneWidget.getNumber();
- if(!/^\+[1-9]\d{6,14}$/.test(phone))throw new Error("The phone number could not be converted to international format. Check the country code and number.");
- return phone;
-}
+
 async function getPrivateAccessToken(forceRefresh=false){
  let currentError=null;
  try{
@@ -792,27 +781,25 @@ async function getPrivateAccessToken(forceRefresh=false){
  console.warn("The SIWES page could not refresh the Supabase session.",currentError?.message||currentError||"No active session");
  throw new Error("Your login session could not be refreshed. Please sign in at /login/, then return to My application. Previously saved sections remain saved.");
 }
-async function checkPrivateContactAvailability(applicationId,email,phone){
+async function checkPrivateContactAvailability(applicationId,email){
  const cleanEmail=String(email||"").trim().toLowerCase();
  if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(cleanEmail))throw new Error("Enter a valid email address before continuing.");
  let accessToken=await getPrivateAccessToken();
  const request=()=>fetch(PRIVATE_CONTACT_CHECK_URL,{
   method:"POST",
   headers:{"Content-Type":"application/json","apikey":PRIVATE_PUBLIC_API_KEY,"Authorization":"Bearer "+accessToken},
-  body:JSON.stringify({action:"check-private-contacts",application_id:applicationId,email:cleanEmail,phone})
+  body:JSON.stringify({action:"check-private-contacts",application_id:applicationId,email:cleanEmail})
  });
  let response=await request();
- // If the access token was rejected, refresh once and retry the same availability check.
  if(response.status===401){
   accessToken=await getPrivateAccessToken(true);
   response=await request();
  }
  let result={};try{result=await response.json();}catch{}
- if(response.status===401)throw new Error("Your login session is no longer valid. Please sign in at /login/, then return to My application. Previously saved sections remain saved.");
- if(!response.ok||result.ok!==true)throw new Error(result.error||"We could not verify your email and phone number. Please try again.");
+ if(response.status===401)throw new Error("Your login session could not be refreshed. Please sign in at /login/, then return to My application. Previously saved sections remain saved.");
+ if(!response.ok||result.ok!==true)throw new Error(result.error||"We could not verify whether this email has already been used. Please try again.");
  if(result.email_available===false)throw new Error(result.email_error||"This email address has already been used for another SIWES application.");
- if(result.phone_available===false)throw new Error(result.phone_error||"This phone number has already been used for another SIWES application.");
- return {email:cleanEmail,phone:result.phone||phone};
+ return {email:cleanEmail};
 }
 const root=document.getElementById("app");let user=null,mode="login",appRow=null,adminRows=[],revealObserver=null;
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -912,7 +899,7 @@ async function loadInstitutionSuggestions(input){
 }
 async function compliance(){
  if(!user){loginNotice();return}
- layout('<section class="dashboard"><div class="shell compliance-wizard"><div class="wizard-heading"><div><div class="eyebrow">APPLICANT WORKSPACE / COMPLIANCE</div><h1>My application</h1><p>Complete one short section at a time. Your progress is saved as you continue.</p></div><a class="btn outline" href="/dashboard/">← Dashboard</a></div><div class="wizard-steps" aria-label="Application steps"><div class="wizard-step-label active" data-step-label="0"><b>1</b><span>Personal details</span></div><div class="wizard-step-label" data-step-label="1"><b>2</b><span>Education</span></div><div class="wizard-step-label" data-step-label="2"><b>3</b><span>Required docs</span></div><div class="wizard-step-label" data-step-label="3"><b>4</b><span>Optional & contacts</span></div><div class="wizard-step-label" data-step-label="4"><b>5</b><span>Confirm</span></div></div><div class="wizard-track" aria-hidden="true"><span id="wizard-progress"></span></div><div class="notice"><strong>Required uploads:</strong> (1) School Letter of Introduction and (2) Valid Student Identification Card. <strong>Optional uploads:</strong> (3) Curriculum Vitae (CV) and (4) recent passport photograph. PDF, JPG or PNG files are accepted up to 10 MB each; the passport photo must be JPG or PNG.</div><div id="cm" class="message hidden"></div><form id="cf" class="form-card"><h2>Student information</h2><p class="small">Fields marked * are required.</p><div class="fields"><div class="field"><label>Full name *</label><input name="full_name" autocomplete="name" required></div><div class="field"><label for="private-phone">Phone number *</label><input id="private-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" required aria-describedby="private-phone-hint" placeholder="Select country code and enter phone number"><small id="private-phone-hint" class="phone-hint">Choose your country code and enter a valid phone number. A number already used for another SIWES application cannot be reused.</small></div><div class="field"><label>Email address *</label><input name="email" type="email" autocomplete="email" required></div><div class="field"><label>Name of institution *</label><input name="institution" list="institution-options" autocomplete="organization" placeholder="Start typing your university name" required><datalist id="institution-options"></datalist><small class="institution-hint">Choose a suggestion, or type your institution’s full name if it is not listed.</small></div><div class="field"><label>Department *</label><input name="department" required></div><div class="field"><label>Course of study *</label><input name="course_of_study" required></div><div class="field"><label>Current level of study *</label><select name="study_level" required><option value="">Select level</option><option>100 level</option><option>200 level</option><option>300 level</option><option>400 level</option><option>500 level</option><option>ND I</option><option>ND II</option><option>HND I</option><option>HND II</option><option>Other</option></select></div><div class="field"><label>Preferred training area *</label><select name="training_area" required><option value="">Select training area</option><option>Farm and poultry operations</option><option>Crop production and farm management</option><option>Agribusiness and administration</option><option>Marketing and customer service</option><option>Digital and technology</option><option>Finance and record keeping</option><option>Open to available placement</option></select></div><div class="field"><label>Required training duration *</label><select name="duration" required><option value="">Select duration</option><option>Institution\'s required duration</option><option>3 months</option><option>4 months</option><option>6 months</option><option>12 months</option><option>Other / to be confirmed</option></select></div><div class="field"><label>Proposed SIWES start date *</label><input name="start_date" type="date" required></div><div class="field"><label>Proposed SIWES end date *</label><input name="end_date" type="date" required></div><div class="field full"><label for="private-address">Contact address *</label><div class="address-autocomplete" id="private-address-wrap"><textarea id="private-address" name="address" autocomplete="street-address" required maxlength="500" aria-autocomplete="list" aria-expanded="false" aria-controls="private-address-suggestions" aria-describedby="private-address-hint" placeholder="Start typing your street, area or landmark"></textarea><div id="private-address-suggestions" class="address-suggestions" role="listbox" aria-label="Google address suggestions" hidden></div></div><small id="private-address-hint" class="address-hint" role="status">Start typing at least 3 characters to find Google address suggestions. You can also enter your address manually.</small></div><div class="field full"><label>Why have you chosen Agrolyst for your SIWES training? *</label><textarea name="reason_for_applying" rows="5" minlength="20" placeholder="Tell us what you hope to learn, the skills you want to develop, and how the training relates to your course of study." required></textarea></div></div><h2 style="margin-top:28px">Required documents</h2><div class="fields"><div class="field"><label>1. School letter of introduction *</label><input type="file" data-type="school_introduction_letter" accept=".pdf,.jpg,.jpeg,.png" required></div><div class="field"><label>2. Valid student identification card *</label><input type="file" data-type="student_id" accept=".pdf,.jpg,.jpeg,.png" required></div></div><h2 style="margin-top:28px">Optional documents</h2><p class="small">These uploads are not required to submit your application. You may add them now or leave them blank.</p><div class="fields"><div class="field"><label>Curriculum Vitae (CV)</label><input type="file" data-type="cv" accept=".pdf,.jpg,.jpeg,.png"></div><div class="field"><label>Recent passport photograph</label><input type="file" data-type="passport_photo" accept=".jpg,.jpeg,.png"></div></div><h2 style="margin-top:28px">Additional information (optional)</h2><p class="small">These details help us contact someone in an emergency. You can leave both fields empty.</p><div class="fields"><div class="field"><label>Emergency contact name</label><input name="emergency_contact_name" autocomplete="off"></div><div class="field"><label>Emergency contact phone number</label><input name="emergency_contact_phone" type="tel" autocomplete="off"></div></div><div class="notice warning" style="margin-top:24px"><strong>Important notice</strong><br>All applications and documents are subject to review by Agrolyst Integrated Farms and Services. Creating an account or submitting documents does not guarantee placement. An acceptance letter is available only after approval and official issue.</div><label class="small" style="display:flex;gap:10px;align-items:flex-start;margin-top:20px"><input type="checkbox" id="truth" required> I confirm that the information provided is accurate and understand that submitting this application does not guarantee placement.</label><p style="margin-top:22px"><button id="send" type="submit">Submit SIWES application</button></p></form></div></section>');
+ layout('<section class="dashboard"><div class="shell compliance-wizard"><div class="wizard-heading"><div><div class="eyebrow">APPLICANT WORKSPACE / COMPLIANCE</div><h1>My application</h1><p>Complete one short section at a time. Your progress is saved as you continue.</p></div><a class="btn outline" href="/dashboard/">← Dashboard</a></div><div class="wizard-steps" aria-label="Application steps"><div class="wizard-step-label active" data-step-label="0"><b>1</b><span>Personal details</span></div><div class="wizard-step-label" data-step-label="1"><b>2</b><span>Education</span></div><div class="wizard-step-label" data-step-label="2"><b>3</b><span>Required docs</span></div><div class="wizard-step-label" data-step-label="3"><b>4</b><span>Optional & contacts</span></div><div class="wizard-step-label" data-step-label="4"><b>5</b><span>Confirm</span></div></div><div class="wizard-track" aria-hidden="true"><span id="wizard-progress"></span></div><div class="notice"><strong>Required uploads:</strong> (1) School Letter of Introduction and (2) Valid Student Identification Card. <strong>Optional uploads:</strong> (3) Curriculum Vitae (CV) and (4) recent passport photograph. PDF, JPG or PNG files are accepted up to 10 MB each; the passport photo must be JPG or PNG.</div><div id="cm" class="message hidden"></div><form id="cf" class="form-card"><h2>Student information</h2><p class="small">Fields marked * are required.</p><div class="fields"><div class="field"><label>Full name *</label><input name="full_name" autocomplete="name" required></div><div class="field phone-unavailable-field"><label for="private-phone">Phone number <span class="phone-hint">(temporarily unavailable)</span></label><input id="private-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" readonly aria-describedby="private-phone-hint" placeholder="Not available for now"><small id="private-phone-hint" class="phone-hint">Phone number collection is temporarily paused. You may select a country code, but email is currently the only available contact method.</small></div><div class="field"><label>Email address *</label><input name="email" type="email" autocomplete="email" required></div><div class="field"><label>Name of institution *</label><input name="institution" list="institution-options" autocomplete="organization" placeholder="Start typing your university name" required><datalist id="institution-options"></datalist><small class="institution-hint">Choose a suggestion, or type your institution’s full name if it is not listed.</small></div><div class="field"><label>Department *</label><input name="department" required></div><div class="field"><label>Course of study *</label><input name="course_of_study" required></div><div class="field"><label>Current level of study *</label><select name="study_level" required><option value="">Select level</option><option>100 level</option><option>200 level</option><option>300 level</option><option>400 level</option><option>500 level</option><option>ND I</option><option>ND II</option><option>HND I</option><option>HND II</option><option>Other</option></select></div><div class="field"><label>Preferred training area *</label><select name="training_area" required><option value="">Select training area</option><option>Farm and poultry operations</option><option>Crop production and farm management</option><option>Agribusiness and administration</option><option>Marketing and customer service</option><option>Digital and technology</option><option>Finance and record keeping</option><option>Open to available placement</option></select></div><div class="field"><label>Required training duration *</label><select name="duration" required><option value="">Select duration</option><option>Institution\'s required duration</option><option>3 months</option><option>4 months</option><option>6 months</option><option>12 months</option><option>Other / to be confirmed</option></select></div><div class="field"><label>Proposed SIWES start date *</label><input name="start_date" type="date" required></div><div class="field"><label>Proposed SIWES end date *</label><input name="end_date" type="date" required></div><div class="field full"><label for="private-address">Contact address *</label><div class="address-autocomplete" id="private-address-wrap"><textarea id="private-address" name="address" autocomplete="street-address" required maxlength="500" aria-autocomplete="list" aria-expanded="false" aria-controls="private-address-suggestions" aria-describedby="private-address-hint" placeholder="Start typing your street, area or landmark"></textarea><div id="private-address-suggestions" class="address-suggestions" role="listbox" aria-label="Google address suggestions" hidden></div></div><small id="private-address-hint" class="address-hint" role="status">Start typing at least 3 characters to find Google address suggestions. You can also enter your address manually.</small></div><div class="field full"><label>Why have you chosen Agrolyst for your SIWES training? *</label><textarea name="reason_for_applying" rows="5" minlength="20" placeholder="Tell us what you hope to learn, the skills you want to develop, and how the training relates to your course of study." required></textarea></div></div><h2 style="margin-top:28px">Required documents</h2><div class="fields"><div class="field"><label>1. School letter of introduction *</label><input type="file" data-type="school_introduction_letter" accept=".pdf,.jpg,.jpeg,.png" required></div><div class="field"><label>2. Valid student identification card *</label><input type="file" data-type="student_id" accept=".pdf,.jpg,.jpeg,.png" required></div></div><h2 style="margin-top:28px">Optional documents</h2><p class="small">These uploads are not required to submit your application. You may add them now or leave them blank.</p><div class="fields"><div class="field"><label>Curriculum Vitae (CV)</label><input type="file" data-type="cv" accept=".pdf,.jpg,.jpeg,.png"></div><div class="field"><label>Recent passport photograph</label><input type="file" data-type="passport_photo" accept=".jpg,.jpeg,.png"></div></div><h2 style="margin-top:28px">Additional information (optional)</h2><p class="small">These details help us contact someone in an emergency. You can leave both fields empty.</p><div class="fields"><div class="field"><label>Emergency contact name</label><input name="emergency_contact_name" autocomplete="off"></div><div class="field"><label>Emergency contact phone <span class="phone-hint">(not available)</span></label><input name="emergency_contact_phone" type="tel" autocomplete="off" disabled placeholder="Not available for now"><small class="phone-hint">Email is the only active contact method for now.</small></div></div><div class="notice warning" style="margin-top:24px"><strong>Important notice</strong><br>All applications and documents are subject to review by Agrolyst Integrated Farms and Services. Creating an account or submitting documents does not guarantee placement. An acceptance letter is available only after approval and official issue.</div><label class="small" style="display:flex;gap:10px;align-items:flex-start;margin-top:20px"><input type="checkbox" id="truth" required> I confirm that the information provided is accurate and understand that submitting this application does not guarantee placement.</label><p style="margin-top:22px"><button id="send" type="submit">Submit SIWES application</button></p></form></div></section>');
  let a;
  try{
   a=await getApp();
@@ -1031,34 +1018,41 @@ async function compliance(){
   setupComplianceWizard(f,a);
   loadInstitutionSuggestions(f.elements.institution);
 
-  ["full_name","phone","email","institution","department","course_of_study","study_level","training_area","duration","start_date","end_date","address","reason_for_applying","emergency_contact_name","emergency_contact_phone"].forEach(k=>{if(f.elements[k])f.elements[k].value=a[k]||(k==="email"?user.email||"": "")});
+  ["full_name","email","institution","department","course_of_study","study_level","training_area","duration","start_date","end_date","address","reason_for_applying","emergency_contact_name"].forEach(k=>{if(f.elements[k])f.elements[k].value=a[k]||(k==="email"?user.email||"": "")});
   initPrivateAddressAutocomplete(f.elements.address);
   if(compliancePhoneWidget){try{compliancePhoneWidget.destroy()}catch{}compliancePhoneWidget=null}
-  if(!window.intlTelInput)throw new Error("The phone number country-code selector could not load. Refresh the page and try again.");
-  compliancePhoneWidget=window.intlTelInput(f.elements.phone,{
-   initialCountry:"ng",
-   countryOrder:["ng","gb","us"],
-   separateDialCode:true,
-   countrySearch:true,
-   strictMode:true,
-   loadUtils:()=>import("https://cdn.jsdelivr.net/npm/intl-tel-input@29.5.7/dist/js/utils.js")
-  });
-  if(a.phone)compliancePhoneWidget.setNumber(a.phone);
-  f.elements.phone.addEventListener("input",()=>f.elements.phone.setCustomValidity(""));
-  f.elements.phone.addEventListener("countrychange",()=>f.elements.phone.setCustomValidity(""));
+  const privatePhone=f.elements.phone;
+  const privatePhoneHint=document.getElementById("private-phone-hint");
+  privatePhone.readOnly=true;privatePhone.required=false;privatePhone.value="";privatePhone.placeholder="Not available for now";
+  if(window.intlTelInput){
+   try{
+    compliancePhoneWidget=window.intlTelInput(privatePhone,{
+     initialCountry:"ng",
+     countryOrder:["ng","gb","us"],
+     separateDialCode:true,
+     countrySearch:true,
+     strictMode:true
+    });
+    privatePhone.addEventListener("countrychange",()=>{privatePhone.value="";privatePhoneHint.textContent="Phone number collection is temporarily paused. You may select a country code, but email is currently the only available contact method.";});
+   }catch(phoneWidgetError){
+    console.warn("Private phone country selector unavailable; application remains email-only.",phoneWidgetError);
+    compliancePhoneWidget=null;privatePhoneHint.textContent="Phone collection is unavailable. Email is the only active contact method.";
+   }
+  }else{
+   privatePhoneHint.textContent="Phone collection is unavailable. Email is the only active contact method.";
+  }
  }catch(e){msg("cm",e.message,true);document.getElementById("cf").classList.add("hidden");return}
  document.getElementById("cf").onsubmit=async e=>{
   e.preventDefault();const b=document.getElementById("send");b.disabled=true;b.textContent="Submitting application…";
   try{
    const f=e.currentTarget;
    if(new Date(f.elements.end_date.value)<new Date(f.elements.start_date.value))throw Error("End date must not be before the start date.");
-   const phoneE164=await getPrivatePhoneE164(f);
-   await checkPrivateContactAvailability(a.id,f.elements.email.value.trim(),phoneE164);
+   await checkPrivateContactAvailability(a.id,f.elements.email.value.trim());
    const files=[...f.querySelectorAll("input[type=file]")].filter(x=>x.files&&x.files[0]);
    if(!files.some(x=>x.dataset.type==="school_introduction_letter")||!files.some(x=>x.dataset.type==="student_id"))throw Error("Upload both the school letter of introduction and valid student ID.");
    for(const el of files){const file=el.files[0];if(file.size>10485760)throw Error(file.name+" exceeds 10 MB.");if(!["application/pdf","image/jpeg","image/png"].includes(file.type))throw Error("Unsupported file type: "+file.name)}
    for(const el of files){const file=el.files[0],type=el.dataset.type,path=user.id+"/"+a.id+"/"+type+"_"+Date.now()+"_"+file.name.replace(/[^a-zA-Z0-9._-]/g,"_");const up=await sb.storage.from("siwes-private").upload(path,file,{contentType:file.type,upsert:false});if(up.error)throw up.error;const md=await sb.from("siwes_documents").insert({application_id:a.id,user_id:user.id,document_type:type,storage_path:up.data.path,original_filename:file.name,mime_type:file.type,file_size_bytes:file.size});if(md.error)throw md.error}
-   const val={};["full_name","phone","email","institution","department","course_of_study","study_level","training_area","duration","start_date","end_date","address","reason_for_applying","emergency_contact_name","emergency_contact_phone"].forEach(k=>val[k]=k==="phone"?phoneE164:(f.elements[k].value.trim()||null));
+   const val={};["full_name","email","institution","department","course_of_study","study_level","training_area","duration","start_date","end_date","address","reason_for_applying","emergency_contact_name"].forEach(k=>val[k]=f.elements[k].value.trim()||null);
    val.status="under_review";val.submitted_at=new Date().toISOString();
    const{error}=await sb.from("siwes_applications").update(val).eq("id",a.id).eq("user_id",user.id);if(error)throw error;
    msg("cm","Your SIWES application has been submitted for review. Reference: "+a.reference_no+". Redirecting to your dashboard…");setTimeout(()=>location.href="/dashboard/",1200)
@@ -1123,11 +1117,10 @@ function setupComplianceWizard(form, application){
   if(current===4||!validPanel())return;
   busy(next,"Saving…");
   try{
-   const phoneE164=await getPrivatePhoneE164(form);
-   if(current===0)await checkPrivateContactAvailability(application.id,form.elements.email.value.trim(),phoneE164);
-   const val={};["full_name","phone","email","institution","department","course_of_study","study_level","training_area","duration","start_date","end_date","address","reason_for_applying","emergency_contact_name","emergency_contact_phone"].forEach(k=>{if(form.elements[k])val[k]=k==="phone"?phoneE164:(form.elements[k].value.trim()||null)});
+   if(current===0)await checkPrivateContactAvailability(application.id,form.elements.email.value.trim());
+   const val={};["full_name","email","institution","department","course_of_study","study_level","training_area","duration","start_date","end_date","address","reason_for_applying","emergency_contact_name"].forEach(k=>{if(form.elements[k])val[k]=form.elements[k].value.trim()||null});
    const{error}=await sb.from("siwes_applications").update(val).eq("id",application.id).eq("user_id",user.id);if(error)throw error;
-   msg("cm","Section saved successfully. Your phone number is validated and stored in international format.");show(current+1);
+   msg("cm","Section saved successfully. Your email address is checked before continuing; phone contact is temporarily unavailable.");show(current+1);
   }catch(e){msg("cm",e.message,true)}finally{restore(next)}
  });
  back.addEventListener("click",()=>{msg("cm","");show(Math.max(0,current-1))});
