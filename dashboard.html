@@ -908,7 +908,6 @@ function setupComplianceWizard(form, application){
  show(0);
 }
 
-async 
 async function documentsPage(){
  if(!user){loginNotice();return}
  layout('<section class="dashboard documents-page"><div class="shell"><div class="page-title"><div><div class="eyebrow">Applicant workspace</div><h1>My documents</h1><p>All files submitted with your SIWES application, plus official letters issued by Agrolyst.</p></div><a class="btn outline" href="/dashboard/">← Dashboard</a></div><div id="doc-message" class="message hidden"></div><div class="documents-summary"><div><span class="documents-count" id="documents-count">—</span><span class="documents-count-label">Your uploaded files</span></div><p>Private to your signed-in account. Select View to open a file, or Print to open it in your browser’s document viewer.</p></div><section class="documents-section"><div class="documents-section-heading"><div><div class="eyebrow">Official placement document</div><h2>Acceptance letter</h2></div><span class="badge" id="letter-state">Checking…</span></div><div id="acceptance-document" class="document-card"><p>Checking whether your acceptance letter has been issued…</p></div></section><section class="documents-section"><div class="documents-section-heading"><div><div class="eyebrow">Application uploads</div><h2>Submitted documents</h2></div></div><div id="uploaded-documents" class="documents-list"><div class="documents-empty">Loading your files…</div></div></section></div></section>');
