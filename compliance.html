@@ -935,6 +935,8 @@ async function compliance(){
  try{
   a=await getApp();
   if(!a){const{data,error}=await sb.from("siwes_applications").insert({user_id:user.id,email:user.email||null}).select("*").single();if(error)throw error;a=data}
+  const{count:uploadedCount,error:countError}=await sb.from("siwes_documents").select("id",{count:"exact",head:true}).eq("application_id",a.id).eq("user_id",user.id);if(countError)throw countError;
+  if(a.status==="under_review"&&(uploadedCount||0)===0){const{error:resetError}=await sb.from("siwes_applications").update({status:"compliance_incomplete",submitted_at:null,updated_at:new Date().toISOString()}).eq("id",a.id).eq("user_id",user.id);if(resetError)throw resetError;a.status="compliance_incomplete"}
   if(!["compliance_incomplete","changes_requested"].includes(a.status)){
    const wizard=document.querySelector(".compliance-wizard");
    if(wizard){
@@ -1081,7 +1083,7 @@ async function compliance(){
    if(new Date(f.elements.end_date.value)<new Date(f.elements.start_date.value))throw Error("End date must not be before the start date.");
    await checkPrivateContactAvailability(a.id,f.elements.email.value.trim());
    const files=[...f.querySelectorAll("input[type=file]")].filter(x=>x.files&&x.files[0]);
-   if(!files.some(x=>x.dataset.type==="school_introduction_letter")||!files.some(x=>x.dataset.type==="student_id"))throw Error("Upload both the school letter of introduction and valid student ID.");
+   if(!files.some(x=>x.dataset.type==="school_introduction_letter")||!files.some(x=>x.dataset.type==="student_id"))throw Error("Your application is not complete yet. Please upload both required files: (1) School Letter of Introduction and (2) Valid Student Identification Card. Gemini cannot review your application until these documents are uploaded.");
    for(const el of files){const file=el.files[0];if(file.size>10485760)throw Error(file.name+" exceeds 10 MB.");if(!["application/pdf","image/jpeg","image/png"].includes(file.type))throw Error("Unsupported file type: "+file.name)}
    for(const el of files){const file=el.files[0],type=el.dataset.type,path=user.id+"/"+a.id+"/"+type+"_"+Date.now()+"_"+file.name.replace(/[^a-zA-Z0-9._-]/g,"_");const up=await sb.storage.from("siwes-private").upload(path,file,{contentType:file.type,upsert:false});if(up.error)throw up.error;const md=await sb.from("siwes_documents").insert({application_id:a.id,user_id:user.id,document_type:type,storage_path:up.data.path,original_filename:file.name,mime_type:file.type,file_size_bytes:file.size});if(md.error)throw md.error}
    const val={};["full_name","email","institution","department","course_of_study","study_level","training_area","duration","start_date","end_date","address","reason_for_applying","emergency_contact_name"].forEach(k=>val[k]=f.elements[k].value.trim()||null);
