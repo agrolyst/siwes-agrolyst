@@ -1106,7 +1106,7 @@ async function dashboard(){
   const a=await getApp(),el=document.getElementById("dc");
   if(!a){
    const signupIntent=user.user_metadata?.signup_intent==="public_application_link";
-   if(signupIntent||["no_matching_application","already_linked","multiple_matching_applications","link_conflict","email_not_verified","link_error"].includes(publicLinkResult?.reason)){
+   if(signupIntent||["no_matching_application","already_linked","multiple_matching_applications","link_conflict","email_not_verified","link_error","inactive_application"].includes(publicLinkResult?.reason)){
     const help=document.createElement("section");help.className="dash-public-link-help";
     const mark=document.createElement("div");mark.className="help-mark";mark.textContent="↗";
     const body=document.createElement("div");
@@ -1115,6 +1115,7 @@ async function dashboard(){
     const reason=publicLinkResult?.reason;
     if(reason==="email_not_verified"){title.textContent="Verify your email to link your application";paragraph.textContent="Please confirm the email address on your account, then sign in again. We only link an application after Supabase confirms that you control the email address.";}
     else if(reason==="already_linked"||reason==="multiple_matching_applications"||reason==="link_conflict"){title.textContent="We need to check your application link";paragraph.textContent="We could not safely attach an application to this account. It may already be linked to another account or there may be duplicate legacy records. Please contact Agrolyst support for help; do not register a duplicate application.";}
+    else if(reason==="inactive_application"){title.textContent="This application is not active";paragraph.textContent="This application is no longer eligible for automatic account linking. Please contact Agrolyst support if you believe this is a mistake.";}
     else if(reason==="link_error"){title.textContent="We couldn't check your application just now";paragraph.textContent="Your account is active, but we could not verify the application link. Please refresh this page and try again. If the issue continues, contact Agrolyst support. "+(publicLinkResult?.error||"");}
     else{title.textContent="Use the email from your public application";paragraph.textContent="We couldn't find a SIWES application associated with this account's verified email address. Please sign out and sign in with the exact email you entered on your public application. If you have not applied yet, you can start a new application.";}
     body.append(title,paragraph);
