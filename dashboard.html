@@ -752,7 +752,7 @@ const logo=()=>'<a class="brand" href="/" aria-label="Agrolyst SIWES home"><img 
 function layout(html){
  const raw=location.pathname.endsWith("/")?location.pathname.slice(0,-1):(location.pathname||"/");
  const route=raw.endsWith(".html")?raw.slice(0,-5):raw;
- const active=route==="/dashboard"?"overview":route==="/compliance"?"application":route==="/acceptance-letter"?"letters":null;
+ const active=route==="/dashboard"?"overview":route==="/compliance"?"application":route==="/acceptance-letter"?"letters":route==="/documents"?"documents":null;
  if(user&&active&&window.AgrolystApp){
   html='<main class="app-dashboard"><div class="shell dash-shell">'+window.AgrolystApp.sidebar(user,active)+'<section class="dash-main">'+html+'</section></div></main>';
   setTimeout(()=>window.AgrolystApp.loadProfilePhoto(user),0);
