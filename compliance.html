@@ -808,7 +808,7 @@ async function checkPrivateContactAvailability(applicationId,email){
 }
 const root=document.getElementById("app");let user=null,mode="login",appRow=null,adminRows=[],revealObserver=null;
 const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const states={compliance_incomplete:"Compliance incomplete",under_review:"Under review",changes_requested:"Changes requested",approved:"Approved — letter not issued",rejected:"Not approved",acceptance_letter_issued:"Acceptance letter issued",resumption_confirmed:"Resumption confirmed",training_in_progress:"Training in progress",completed:"Completed"};
+const states={compliance_incomplete:"Compliance incomplete",under_review:"Under review",changes_requested:"Changes requested",approved:"Approved — letter not issued",rejected:"Rejected",acceptance_letter_issued:"Acceptance letter issued",resumption_confirmed:"Resumption confirmed",training_in_progress:"Training in progress",completed:"Completed"};
 const stages=[["compliance_incomplete","Complete profile and compliance"],["under_review","Application under review"],["changes_requested","Corrections requested"],["approved","Application approved"],["acceptance_letter_issued","Acceptance letter issued"],["resumption_confirmed","Resumption confirmed"],["training_in_progress","Training in progress"],["completed","Training completed"]];
 const date=x=>x?new Date(x+"T00:00:00").toLocaleDateString("en-NG",{day:"numeric",month:"long",year:"numeric"}):"To be confirmed";
 const stamp=x=>x?new Date(x).toLocaleDateString("en-NG",{day:"numeric",month:"long",year:"numeric"}):"Not issued";
@@ -981,7 +981,7 @@ async function compliance(){
       description:"A decision has been recorded for this SIWES application. The application form is closed for this submission. Please contact Agrolyst through its official channels if you need clarification about the decision.",
       nextTitle:"Need clarification?",
       next:"Contact the Agrolyst team and provide your application reference. Do not create a duplicate application just to ask about this decision.",
-      statusLabel:"Not approved",
+      statusLabel:"Rejected",
       meta:"Decision recorded"
      },
      resumption_confirmed:{
