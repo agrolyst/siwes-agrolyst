@@ -29,13 +29,15 @@ const sb=createClient("https://orhlccyodjuhwoaelmyd.supabase.co","sb_publishable
 const form=document.getElementById("password-form"),message=document.getElementById("message"),title=document.getElementById("title"),copy=document.getElementById("copy"),save=document.getElementById("save");
 function show(text,error=false){message.textContent=text;message.className="message show"+(error?" error":"");}
 let recoverySession=false;
+const hashParams=new URLSearchParams(location.hash.replace(/^#/,""));
+const recoveryMarker="agrolyst_password_recovery_session";
 sb.auth.onAuthStateChange((event,session)=>{
- if(event==="PASSWORD_RECOVERY"&&session){recoverySession=true;form.hidden=false;show("Your reset link has been verified. Choose your new password.");}
+ if(event==="PASSWORD_RECOVERY"&&session){recoverySession=true;sessionStorage.setItem(recoveryMarker,"1");form.hidden=false;show("Your reset link has been verified. Choose your new password.");}
 });
 try{
  const {data,error}=await sb.auth.getSession();
  if(error)throw error;
- if(data.session){
+ if(data.session&&(hashParams.get("type")==="recovery"||sessionStorage.getItem(recoveryMarker)==="1")){
   recoverySession=true;form.hidden=false;
   show("Your secure recovery session is active. Choose a new password.");
  }else{
@@ -61,6 +63,7 @@ form.addEventListener("submit",async e=>{
   copy.textContent="Your Agrolyst SIWES account now has a new password.";
   form.hidden=true;
   await sb.auth.signOut();
+  sessionStorage.removeItem(recoveryMarker);
   setTimeout(()=>location.replace("/login/"),1800);
  }catch(err){show(err.message||"We could not update your password. Please request a fresh reset link and try again.",true);}
  finally{save.disabled=false;save.textContent="Save new password";}
