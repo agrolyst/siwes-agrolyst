@@ -16,6 +16,7 @@
 /* Keep the acceptance-letter workspace visually aligned with the dashboard. */
 .dash-main{min-width:0;animation:letterWorkspaceIn .5s cubic-bezier(.2,.75,.25,1) both}.page-heading{background:linear-gradient(125deg,#123d2b,#1e6842);color:#fff;border-radius:18px;padding:26px 28px;margin-bottom:20px;position:relative;overflow:hidden}.page-heading h1{color:#fff}.page-heading p{color:#e0ece3}.page-heading .eyebrow{color:#d4e76a}.letter{border-radius:14px;box-shadow:0 18px 45px #123d2b10;animation:letterWorkspaceIn .55s .08s both}.panel{border-radius:14px}@keyframes letterWorkspaceIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}@media(prefers-reduced-motion:reduce){.dash-main,.letter{animation:none}}
 </style>
+<meta name="robots" content="noindex,follow">
 </head>
 <body>
 <header class="header"><div class="shell nav"><a class="brand" href="/"><img src="/agrolystfarmslogo.png" alt="Agrolyst Integrated Farms and Services logo"><span>STUDENT TRAINING<small>SIWES APPLICATION PORTAL</small></span></a><nav class="links" aria-label="Main navigation"><a href="/">Programme</a><a href="/#how-it-works">How it works</a><a href="/#requirements">Documents</a><a href="/#faq">FAQs</a><a href="/dashboard/">Dashboard</a></nav><a class="btn secondary" href="/dashboard/">My dashboard</a></div></header>
@@ -81,5 +82,6 @@ try{
  }
 }catch(error){if(!["AUTH_REQUIRED","NO_APPLICATION"].includes(error.message)){console.error(error);status.innerHTML='<h2>Could not load your letter</h2><p>Please refresh the page. If this continues, sign out and sign in again.</p><a class="btn secondary" href="/dashboard/">Return to dashboard</a>'}}
 </script>
+<a href="/how-to-use/" aria-label="How to use the Agrolyst SIWES portal" style="position:fixed;right:20px;bottom:20px;z-index:99999;display:inline-flex;align-items:center;gap:8px;padding:12px 17px;border-radius:999px;background:#123d2b;color:#fff;text-decoration:none;font:800 13px/1.2 Arial,sans-serif;box-shadow:0 8px 24px rgba(18,61,43,.24);border:1px solid rgba(255,255,255,.25)">? <span>How to use</span></a>
 </body>
 </html>
