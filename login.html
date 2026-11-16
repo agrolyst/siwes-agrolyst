@@ -172,6 +172,7 @@ function showMessage(text,kind="error"){message.textContent=text;message.classNa
 document.getElementById("resend-confirmation").addEventListener("click",async()=>{const email=document.getElementById("email").value.trim();if(!email){showMessage("Enter your registered email address first.");document.getElementById("email").focus();return;}const button=document.getElementById("resend-confirmation");button.disabled=true;try{const {error}=await sb.auth.resend({type:"signup",email,options:{emailRedirectTo:location.origin+"/auth/confirm/"}});if(error)throw error;showMessage("If this address has an unconfirmed account, a new confirmation email has been sent. Please check your inbox and spam folder.","success");}catch(err){showMessage(err.message||"We could not resend the confirmation email. Please try again.");}finally{button.disabled=false;}});
 document.getElementById("switch-link").addEventListener("click",e=>{e.preventDefault();location.href="/signup/"});
 document.getElementById("forgot-password-link").addEventListener("click",()=>{
+ if(authMode==="recovery"){document.getElementById("back-to-signin").click();return;}
  authMode="recovery";verifyForm.hidden=true;form.hidden=false;
  document.getElementById("form-title").textContent="Reset your password";
  document.getElementById("form-intro").textContent="Enter the email address registered to your SIWES account. We’ll send you a secure password-reset link.";
