@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#103d2b">
+<title>Confirm Account | Agrolyst SIWES Portal</title>
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:24px;background:#edf5ed;color:#24432e;font-family:Arial,Helvetica,sans-serif}.wrap{width:min(560px,100%);text-align:center;padding:34px 24px;background:#edf5ed}.logo{width:150px;height:auto;max-width:70%;object-fit:contain;margin-bottom:28px}.eyebrow{font-size:10px;letter-spacing:3px;font-weight:bold;color:#568060}.title{font-size:28px;color:#176b3a;margin:14px 0}.copy{font-size:14px;line-height:1.8;color:#56705b}.status{margin:22px 0;padding:14px;border-top:1px solid #d5e5d5;border-bottom:1px solid #d5e5d5;font-size:13px;line-height:1.7;color:#405d47}.btn{display:inline-block;background:#176b3a;color:white;text-decoration:none;padding:14px 25px;font-size:13px;font-weight:bold;border-radius:6px}.error{color:#a33}.small{font-size:11px;color:#718075;margin-top:24px}
+</style>
+</head>
+<body>
+<main class="wrap">
+<img class="logo" src="https://agrolystfarms.com/Agrolyst%20Logo.jpeg" alt="Agrolyst Farms">
+<div class="eyebrow">AGROLYST FARMS</div>
+<h1 class="title" id="title">Confirming your account</h1>
+<p class="copy" id="copy">Please wait while we securely verify your email address and sign you in.</p>
+<div class="status" id="status" role="status" aria-live="polite">Verifying your secure link…</div>
+<a class="btn" id="continue" href="/login/" hidden>Continue to SIWES Portal</a>
+<p class="small">SIWES Administration Team · siwes.agrolystfarms.com</p>
+</main>
+<script type="module">
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
+const sb=createClient("https://orhlccyodjuhwoaelmyd.supabase.co","sb_publishable_3HEzwj5aGJx3VOQD7l8jwQ_MngS3dcK",{auth:{autoRefreshToken:true,persistSession:true,detectSessionInUrl:true}});
+const status=document.getElementById("status"),title=document.getElementById("title"),copy=document.getElementById("copy"),next=document.getElementById("continue");
+const q=new URLSearchParams(location.search),h=new URLSearchParams(location.hash.replace(/^#/,""));
+const type=q.get("type")||h.get("type")||"email";
+const code=q.get("code"),tokenHash=q.get("token_hash")||q.get("token");
+try{
+ let result;
+ if(code){result=await sb.auth.exchangeCodeForSession(code);}
+ else if(tokenHash){result=await sb.auth.verifyOtp({token_hash:tokenHash,type});}
+ else if(q.get("error_description")||h.get("error_description")){throw new Error(q.get("error_description")||h.get("error_description"));}
+ else {const {data,error}=await sb.auth.getSession();if(error)throw error;if(!data.session)throw new Error("This confirmation link is incomplete or has already been used. Request a new email and try again.");result={data,error:null};}
+ if(result.error)throw result.error;
+ if(!result.data?.session)throw new Error("The link was verified, but no signed-in session was returned. Please sign in.");
+ status.textContent="Your email has been confirmed successfully. You are now signed in.";
+ title.textContent=type==="invite"?"Invitation accepted!":"Email confirmed!";
+ copy.textContent=type==="invite"?"Welcome to Agrolyst Farms. Your invitation has been accepted.":"Your Agrolyst SIWES account is ready. You can continue to your student dashboard.";
+ next.href="/dashboard.html";next.textContent="Open my SIWES dashboard";next.hidden=false;
+ if(type==="email_change"){next.textContent="Continue to my account";}
+}catch(error){
+ status.textContent=error?.message||"We could not verify this link. Request a new email and try again.";
+ status.classList.add("error");title.textContent="Verification unsuccessful";copy.textContent="For your security, expired or previously used links cannot be reused.";
+ next.href="/login/";next.textContent="Return to sign in";next.hidden=false;
+}
+</script>
+</body>
+</html>
