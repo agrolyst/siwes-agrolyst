@@ -1,9 +1,8 @@
+# Public pages remain crawlable so search engines can read page-level indexing directives.
 User-agent: *
 Allow: /
-Disallow: /dashboard/
-Disallow: /login/
-Disallow: /signup/
-Disallow: /documents/
-Disallow: /forgot-password/
+
+# Private account and workflow pages carry a noindex,follow meta directive.
+# Do not use robots.txt disallow rules here; crawlers must be able to read those directives.
 
 Sitemap: https://siwes.agrolystfarms.com/sitemap.xml
