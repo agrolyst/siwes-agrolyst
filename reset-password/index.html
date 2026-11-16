@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#103d2b">
+<title>Create New Password | Agrolyst SIWES Portal</title>
+<style>
+*{box-sizing:border-box}body{margin:0;min-height:100vh;display:grid;place-items:center;padding:22px;background:#edf5ed;color:#24432e;font-family:Arial,Helvetica,sans-serif}.card{width:min(470px,100%);padding:34px 28px;background:#fff;border:1px solid #d8e7d8;border-radius:15px;box-shadow:0 18px 55px #123d2b12}.logo{display:block;width:145px;max-width:65%;height:auto;margin:0 auto 22px}.eyebrow{text-align:center;font-size:10px;letter-spacing:3px;font-weight:bold;color:#568060}.title{text-align:center;font-size:27px;color:#176b3a;margin:12px 0}.copy{text-align:center;font-size:13px;line-height:1.8;color:#56705b;margin:0 0 24px}.field{display:block;margin:0 0 16px}.field label{display:block;font-size:12px;font-weight:bold;margin-bottom:8px}.field input{width:100%;height:48px;border:1px solid #cbdccb;border-radius:8px;padding:0 13px;font-size:14px;outline:none}.field input:focus{border-color:#287747;box-shadow:0 0 0 3px #28774718}.btn{width:100%;height:48px;border:0;border-radius:8px;background:#176b3a;color:#fff;font-size:13px;font-weight:bold;cursor:pointer}.btn:disabled{opacity:.6;cursor:wait}.message{display:none;padding:12px;border-radius:8px;font-size:12px;line-height:1.6;margin:0 0 16px}.message.show{display:block;background:#eef8ed;border:1px solid #d5e9d2;color:#23613a}.message.error{background:#fff0ed;border-color:#f3d0c8;color:#a12c1e}.footer{text-align:center;font-size:11px;color:#718075;margin:22px 0 0}.footer a{color:#176b3a;font-weight:bold;text-decoration:none}
+</style>
+</head>
+<body>
+<main class="card">
+<img class="logo" src="https://agrolystfarms.com/Agrolyst%20Logo.jpeg" alt="Agrolyst Farms">
+<div class="eyebrow">AGROLYST FARMS</div>
+<h1 class="title" id="title">Create a new password</h1>
+<p class="copy" id="copy">Choose a strong password for your SIWES account. You’ll need to enter it twice to confirm.</p>
+<div class="message" id="message" role="status" aria-live="polite"></div>
+<form id="password-form" hidden>
+<label class="field"><span>New password</span><input id="password" type="password" autocomplete="new-password" minlength="8" required placeholder="At least 8 characters"></label>
+<label class="field"><span>Confirm new password</span><input id="confirm-password" type="password" autocomplete="new-password" minlength="8" required placeholder="Enter the password again"></label>
+<button class="btn" id="save" type="submit">Save new password</button>
+</form>
+<p class="footer"><a href="/login/">Return to SIWES sign in</a><br><br>SIWES Administration Team</p>
+</main>
+<script type="module">
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
+const sb=createClient("https://orhlccyodjuhwoaelmyd.supabase.co","sb_publishable_3HEzwj5aGJx3VOQD7l8jwQ_MngS3dcK",{auth:{autoRefreshToken:true,persistSession:true,detectSessionInUrl:true}});
+const form=document.getElementById("password-form"),message=document.getElementById("message"),title=document.getElementById("title"),copy=document.getElementById("copy"),save=document.getElementById("save");
+function show(text,error=false){message.textContent=text;message.className="message show"+(error?" error":"");}
+let recoverySession=false;
+sb.auth.onAuthStateChange((event,session)=>{
+ if(event==="PASSWORD_RECOVERY"&&session){recoverySession=true;form.hidden=false;show("Your reset link has been verified. Choose your new password.","success");}
+});
+try{
+ const {data,error}=await sb.auth.getSession();
+ if(error)throw error;
+ if(data.session){
+  recoverySession=true;form.hidden=false;
+  show("Your secure recovery session is active. Choose a new password.","success");
+ }else{
+  throw new Error("This password-reset link is invalid, expired, or has already been used. Request a new reset email.");
+ }
+}catch(err){
+ title.textContent="Reset link unavailable";
+ copy.textContent="For your security, password-reset links can only be used once and cannot be reused after expiry.";
+ show(err.message||"This reset link is invalid or expired. Request a new one from the login page.",true);
+}
+form.addEventListener("submit",async e=>{
+ e.preventDefault();
+ if(!recoverySession){show("Please open a valid password-reset link from your email.",true);return;}
+ const password=document.getElementById("password").value,confirm=document.getElementById("confirm-password").value;
+ if(password.length<8){show("Your new password must contain at least 8 characters.",true);return;}
+ if(password!==confirm){show("The passwords do not match. Please check and try again.",true);return;}
+ save.disabled=true;save.textContent="Updating password…";
+ try{
+  const {error}=await sb.auth.updateUser({password});
+  if(error)throw error;
+  show("Your password has been changed successfully. Taking you back to sign in…");
+  title.textContent="Password updated";
+  copy.textContent="Your Agrolyst SIWES account now has a new password.";
+  form.hidden=true;
+  await sb.auth.signOut();
+  setTimeout(()=>location.replace("/login/"),1800);
+ }catch(err){show(err.message||"We could not update your password. Please request a fresh reset link and try again.",true);}
+ finally{save.disabled=false;save.textContent="Save new password";}
+});
+</script>
+</body>
+</html>
