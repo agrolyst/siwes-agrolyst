@@ -30,14 +30,14 @@ const form=document.getElementById("password-form"),message=document.getElementB
 function show(text,error=false){message.textContent=text;message.className="message show"+(error?" error":"");}
 let recoverySession=false;
 sb.auth.onAuthStateChange((event,session)=>{
- if(event==="PASSWORD_RECOVERY"&&session){recoverySession=true;form.hidden=false;show("Your reset link has been verified. Choose your new password.","success");}
+ if(event==="PASSWORD_RECOVERY"&&session){recoverySession=true;form.hidden=false;show("Your reset link has been verified. Choose your new password.");}
 });
 try{
  const {data,error}=await sb.auth.getSession();
  if(error)throw error;
  if(data.session){
   recoverySession=true;form.hidden=false;
-  show("Your secure recovery session is active. Choose a new password.","success");
+  show("Your secure recovery session is active. Choose a new password.");
  }else{
   throw new Error("This password-reset link is invalid, expired, or has already been used. Request a new reset email.");
  }
