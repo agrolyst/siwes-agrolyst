@@ -186,6 +186,58 @@ body:has(.dashboard-content) .dash-main{min-width:0}
  .dashboard-content .dash-empty{padding:24px}
 }
 @media(prefers-reduced-motion:reduce){.dashboard-content,.dashboard-content #dc{animation:none!important}.dashboard-content *,body:has(.dashboard-content) .dash-nav{animation:none!important;transition:none!important}.dashboard-content .dash-welcome:before,.dashboard-content .dash-progress-track span{animation:none!important}}
+
+/* Link-application page refresh — branded, calm, responsive */
+.link-application-page{min-height:calc(100vh - 76px);padding:34px 0 42px;background:radial-gradient(ellipse at 12% 12%,#dcebd7 0,transparent 36%),radial-gradient(ellipse at 90% 88%,#d9e8d4 0,transparent 34%),linear-gradient(135deg,#edf5ed 0%,#f4f8f0 52%,#e8f1e5 100%);position:relative;isolation:isolate;overflow:hidden}
+.link-application-page:before{content:"";position:absolute;inset:0;z-index:-1;opacity:.32;background-image:radial-gradient(#1e684220 .7px,transparent .7px);background-size:20px 20px;mask-image:linear-gradient(90deg,#000,transparent 85%)}
+.link-app-wrap{width:min(1120px,calc(100% - 38px));margin:auto}
+.link-app-topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:0 0 22px;border-bottom:1px solid #cdddc9}
+.link-app-brand{display:flex;align-items:center;gap:11px;text-decoration:none;color:#123d2b}
+.link-app-brand img{width:48px;height:48px;object-fit:contain}
+.link-app-brand strong,.link-app-brand small{display:block}
+.link-app-brand strong{font-size:14px;letter-spacing:2px;font-weight:950}
+.link-app-brand small{font-size:9px;letter-spacing:1.2px;color:#66816a;font-weight:800;margin-top:3px}
+.link-app-home{font-size:12px;font-weight:800;color:#286c40;text-decoration:none}
+.link-app-layout{display:grid;grid-template-columns:minmax(0,1.04fr) minmax(360px,.86fr);align-items:center;gap:clamp(34px,7vw,88px);padding:clamp(38px,6vw,76px) 0 34px}
+.link-app-intro{max-width:600px}
+.link-app-eyebrow{display:inline-flex;align-items:center;gap:9px;color:#52734e;font-size:10px;font-weight:900;letter-spacing:1.7px}
+.link-app-eyebrow span{width:8px;height:8px;border-radius:50%;background:#83a94b;box-shadow:0 0 0 5px #83a94b20}
+.link-app-intro h1{font-size:clamp(36px,5vw,58px);line-height:1.04;letter-spacing:-2.2px;color:#143d2a;margin:20px 0 17px;max-width:590px}
+.link-app-intro h1 em{font-style:normal;color:#367b49}
+.link-app-lead{max-width:560px;font-size:15px;line-height:1.8;color:#5c705f;margin:0}
+.link-app-intro .link-app-steps{margin-top:28px;padding:0;gap:0}
+.link-app-intro .link-app-steps article{grid-template-columns:38px minmax(0,1fr);gap:14px;padding:14px 0;border-bottom:1px solid #d9e5d5}
+.link-app-intro .link-app-steps article>span{width:34px;height:34px;border-radius:11px;background:#dcebd5;color:#1e6842}
+.link-app-intro .link-app-steps h3{font-size:13px;color:#1c442d;margin:1px 0 4px}
+.link-app-intro .link-app-steps p{font-size:12px;line-height:1.65;color:#647666;margin:0}
+.link-app-assurance{display:flex;align-items:flex-start;gap:12px;margin-top:22px;padding:15px 16px;background:#e3efe0;border:1px solid #cbdcc5;border-radius:12px}
+.link-app-assurance>span{width:23px;height:23px;display:grid;place-items:center;flex:0 0 23px;border-radius:50%;background:#1e6842;color:#fff;font-size:13px;font-weight:900}
+.link-app-assurance p{margin:0;color:#5a6e5b;font-size:11px;line-height:1.65}
+.link-app-assurance strong{color:#214c31}
+.link-app-card.link-app-login-card{width:100%;max-width:490px;padding:clamp(22px,3vw,34px);background:linear-gradient(145deg,#e6f0e2eF,#f0f6edF2);border:1px solid #c8dbc3;border-radius:18px;box-shadow:0 22px 55px #123d2b12}
+.link-app-card-head{padding-bottom:20px;border-color:#d5e2d0}
+.link-app-icon{background:#d5e8d0;color:#1e6842;border-radius:13px}
+.link-app-card-kicker{color:#638064}
+.link-app-card-head h2{font-size:21px;color:#163e2a;letter-spacing:-.6px}
+.link-app-login-card .field{margin:22px 0 16px}
+.link-app-login-card .field label{color:#294a32}
+.link-app-login-card .field input{min-height:54px;border:1px solid #c4d6bf;border-radius:10px;padding:14px 15px;background:#f8fbf6;color:#183c28;font-size:14px}
+.link-app-login-card .field input:focus{outline:0;border-color:#43865b;box-shadow:0 0 0 4px #1e684414;background:#fff}
+.link-app-primary.link-app-wide{min-height:52px;border-radius:10px;background:linear-gradient(105deg,#123d2b,#1e6842 72%,#2d8050);box-shadow:0 9px 20px #123d2b1c}
+.link-app-primary.link-app-wide:hover{background:#123d2b;transform:translateY(-1px)}
+.link-app-code-note{background:#e0eddc;border:1px solid #c9ddc3;color:#234a30;border-radius:10px}
+.link-app-security{background:#e1eddd;border:1px solid #cbdcc5;border-radius:11px;margin:22px 0 15px}
+.link-app-security p{color:#536a55}
+.link-app-security strong{color:#214c31}
+.link-app-foot{color:#647666}
+.link-app-foot a,.link-app-bottom a{color:#1e6842}
+.link-app-bottom{border-top:1px solid #d2e0ce;margin-top:12px;padding-top:21px}
+.link-app-footer{text-align:center;color:#788a79;font-size:10px;letter-spacing:.3px;padding-top:18px}
+.link-app-footer span{padding:0 6px;color:#9bad96}
+@media(max-width:850px){.link-app-layout{grid-template-columns:1fr;gap:28px;padding-top:42px}.link-app-intro{max-width:680px}.link-app-card.link-app-login-card{max-width:680px}.link-app-intro h1{max-width:680px}}
+@media(max-width:560px){.link-application-page{padding-top:20px}.link-app-wrap{width:calc(100% - 28px)}.link-app-topbar{padding-bottom:15px}.link-app-brand img{width:40px;height:40px}.link-app-brand strong{font-size:12px}.link-app-brand small{font-size:8px}.link-app-layout{padding:32px 0 25px}.link-app-intro h1{font-size:37px;letter-spacing:-1.5px;margin:15px 0 12px}.link-app-lead{font-size:13px}.link-app-card.link-app-login-card{padding:20px;border-radius:15px}.link-app-code-actions{gap:8px}.link-app-bottom{font-size:11px}}
+@media(prefers-reduced-motion:reduce){.link-app-primary,.link-app-secondary{transition:none!important}}
+
 </style><style>
 :root{--forest:#123d2b;--green:#216b47;--lime:#d9ea83;--ink:#17241c;--muted:#68756b;--paper:#f6f7f2;--line:#dce4da}
 body{font-family:Inter,"Segoe UI",Arial,sans-serif;background:var(--paper);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
@@ -1003,7 +1055,38 @@ function home(){layout('<main><section class="hero"><div class="shell hero-grid"
 '<section class="bottom-cta"><div class="shell cta-inner"><div><h2>Ready to take the next step?</h2><p>Create your account and complete your SIWES application when your documents are ready.</p></div><a class="btn" href="/login/">Enter the applicant portal →</a></div></section><section class="link-application-promo"><div class="shell link-promo-inner"><div class="link-promo-copy"><span class="link-promo-kicker">ALREADY APPLIED?</span><h2>Bring your application into your Agrolyst account.</h2><p>Submitted your details on the Apply SIWES website? Link that application to your private dashboard using the same verified email address.</p><a class="link-promo-cta" href="/link-application/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7.1 0l2-2a5 5 0 0 0-7.1-7.1l-1.1 1.1"/><path d="M14 11a5 5 0 0 0-7.1 0l-2 2a5 5 0 0 0 7.1 7.1l1.1-1.1"/></svg>Link my application <span aria-hidden="true">→</span></a></div><div class="link-promo-steps"><div><span class="link-promo-number">01</span><p><strong>Apply first</strong><small>Submit your form at applysiwes.agrolystfarms.com</small></p></div><div><span class="link-promo-number">02</span><p><strong>Use the same email</strong><small>Create your portal account or sign in with your application email</small></p></div><div><span class="link-promo-number">03</span><p><strong>Open your dashboard</strong><small>Verify your email and your application will be matched securely</small></p></div></div></div></section></main>');refreshHomeActions()}
 function linkApplicationPage(){
  const defaultEmail=user?.email||"";
- layout('<main class="link-application-page"><section class="link-app-wrap"><div class="link-app-heading"><span class="link-app-eyebrow"><span></span> AGROLYST SIWES · SECURE ACCOUNT ACCESS</span><h1>Connect your <em>SIWES application.</em></h1><p>Enter the email address you used when applying. We will check your application record and, if it is active, send a one-time sign-in code to that email.</p></div><div class="link-app-card link-app-login-card"><div class="link-app-card-head"><span class="link-app-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/><path d="M16 3h5v5"/></svg></span><div><span class="link-app-card-kicker">EMAIL VERIFICATION</span><h2>Sign in with a secure code</h2></div></div><div id="link-app-message" class="message hidden" role="status" aria-live="polite"></div><form id="link-app-email-form" novalidate><div class="field"><label for="link-app-email">Application email address</label><input id="link-app-email" name="email" type="email" autocomplete="email" placeholder="Enter the email used on your application" value="'+esc(defaultEmail)+'" required></div><button id="link-app-send" class="link-app-primary link-app-wide" type="submit">Send verification code <span aria-hidden="true">→</span></button></form><form id="link-app-code-form" class="hidden" novalidate><div class="link-app-code-note"><strong>Check your email</strong><span>Enter the six-digit code sent to <b id="link-app-masked-email"></b>. The code expires in 10 minutes.</span></div><div class="field"><label for="link-app-code">Six-digit verification code</label><input id="link-app-code" name="code" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" placeholder="000000" required></div><button id="link-app-verify" class="link-app-primary link-app-wide" type="submit">Verify code and sign in <span aria-hidden="true">→</span></button><div class="link-app-code-actions"><button id="link-app-resend" type="button" class="link-app-text-button">Send a new code</button><button id="link-app-change-email" type="button" class="link-app-text-button">Change email</button></div></form><div class="link-app-security"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3 20 6v5c0 5-3.4 8.4-8 10-4.6-1.6-8-5-8-10V6l8-3Z"/><path d="m8.5 12 2.2 2.2 4.8-5"/></svg><p><strong>Your details stay protected.</strong> The application is checked securely on our server. We never reveal applicant records on this page, and a code can only be used once.</p></div><p class="link-app-foot">If you have not applied yet, <a href="https://applysiwes.agrolystfarms.com/" target="_blank" rel="noopener">submit your application first ↗</a>. If you used a different email, contact Agrolyst support.</p></div><div class="link-app-bottom"><span>Already signed in?</span> <a href="/dashboard/">Open your applicant dashboard ↗</a></div></section></main>');
+ layout(`<main class="link-application-page">
+  <section class="link-app-wrap">
+   <header class="link-app-topbar">
+    <a class="link-app-brand" href="/" aria-label="Agrolyst SIWES home"><img src="/agrolystfarmslogo.png" alt="Agrolyst Farms"><span><strong>AGROLYST</strong><small>SIWES APPLICANT PORTAL</small></span></a>
+    <a class="link-app-home" href="/">Portal home <span aria-hidden="true">↗</span></a>
+   </header>
+   <div class="link-app-layout">
+    <div class="link-app-intro">
+     <span class="link-app-eyebrow"><span></span> SECURE APPLICATION ACCESS</span>
+     <h1>Bring your <em>SIWES application</em> into your account.</h1>
+     <p class="link-app-lead">Use the email address you entered when applying. We’ll verify it securely and connect your eligible application to your Agrolyst student dashboard.</p>
+     <div class="link-app-steps">
+      <article><span>01</span><div><h3>Enter your application email</h3><p>Use the same email address you submitted on the Apply SIWES website.</p></div></article>
+      <article><span>02</span><div><h3>Verify your six-digit code</h3><p>We’ll send a one-time code to that email. It expires after 10 minutes.</p></div></article>
+      <article><span>03</span><div><h3>Open your dashboard</h3><p>After verification, your application can be securely connected to your account.</p></div></article>
+     </div>
+     <div class="link-app-assurance"><span aria-hidden="true">✓</span><p><strong>Private and protected</strong><br>Your application details are checked securely. This page does not reveal whether an email has an application.</p></div>
+    </div>
+    <section class="link-app-card link-app-login-card" aria-labelledby="link-app-form-title">
+     <div class="link-app-card-head"><span class="link-app-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/><path d="M16 3h5v5"/></svg></span><div><span class="link-app-card-kicker">EMAIL VERIFICATION</span><h2 id="link-app-form-title">Connect your application</h2></div></div>
+     <div id="link-app-message" class="message hidden" role="status" aria-live="polite"></div>
+     <form id="link-app-email-form" novalidate><div class="field"><label for="link-app-email">Application email address</label><input id="link-app-email" name="email" type="email" autocomplete="email" placeholder="you@example.com" value="${esc(defaultEmail)}" required></div><button id="link-app-send" class="link-app-primary link-app-wide" type="submit">Send verification code <span aria-hidden="true">→</span></button></form>
+     <form id="link-app-code-form" class="hidden" novalidate><div class="link-app-code-note"><strong>Check your inbox</strong><span>Enter the six-digit code sent to <b id="link-app-masked-email"></b>. It expires in 10 minutes.</span></div><div class="field"><label for="link-app-code">Six-digit verification code</label><input id="link-app-code" name="code" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" placeholder="000000" required></div><button id="link-app-verify" class="link-app-primary link-app-wide" type="submit">Verify code and continue <span aria-hidden="true">→</span></button><div class="link-app-code-actions"><button id="link-app-resend" type="button" class="link-app-text-button">Resend code</button><button id="link-app-change-email" type="button" class="link-app-text-button">Use another email</button></div></form>
+     <div class="link-app-security"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3 20 6v5c0 5-3.4 8.4-8 10-4.6-1.6-8-5-8-10V6l8-3Z"/><path d="m8.5 12 2.2 2.2 4.8-5"/></svg><p><strong>Never share your verification code.</strong> Agrolyst staff will never ask you to disclose it. If you did not request this code, simply ignore the email.</p></div>
+     <p class="link-app-foot">Haven’t applied yet? <a href="https://applysiwes.agrolystfarms.com/" target="_blank" rel="noopener">Submit your SIWES application ↗</a></p>
+    </section>
+   </div>
+   <div class="link-app-bottom"><span>Already signed in?</span> <a href="/dashboard/">Open your applicant dashboard ↗</a></div>
+   <footer class="link-app-footer">© ${new Date().getFullYear()} Agrolyst Farms <span>·</span> SIWES Administration</footer>
+  </section>
+ </main>`);
+
  const emailForm=document.getElementById("link-app-email-form"),codeForm=document.getElementById("link-app-code-form"),emailInput=document.getElementById("link-app-email"),codeInput=document.getElementById("link-app-code"),message=document.getElementById("link-app-message"),sendButton=document.getElementById("link-app-send"),verifyButton=document.getElementById("link-app-verify"),resendButton=document.getElementById("link-app-resend"),changeButton=document.getElementById("link-app-change-email");
  const endpoint="https://orhlccyodjuhwoaelmyd.supabase.co/functions/v1/public-siwes-applications",publicKey="sb_publishable_3HEzwj5aGJx3VOQD7l8jwQ_MngS3dcK";
  let challengeId="";
