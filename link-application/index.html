@@ -1061,7 +1061,7 @@ function linkApplicationPage(){
    if(data&&!inactive.includes(String(data.status||"").toLowerCase()))location.replace("/dashboard/");
   });
  }
- const defaultEmail=user?.email||"";
+ const linkParams=new URLSearchParams(location.search);const requestedEmail=(linkParams.get("email")||"").trim().toLowerCase();const defaultEmail=user?.email||requestedEmail;
  layout(`<main class="link-application-page">
   <section class="link-app-wrap">
    <header class="link-app-topbar">
