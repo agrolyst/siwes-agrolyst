@@ -21,17 +21,20 @@ h1,h2,h3{font-family:Manrope,"DM Sans",sans-serif}h1{font-size:clamp(36px,6vw,62
 .section-heading{margin:38px 0 16px}.section-heading span{color:#54804b;font-size:10px;font-weight:900;letter-spacing:1.8px}.section-heading h2{font-size:26px;color:var(--forest);margin:4px 0}
 .steps{display:grid;gap:20px;padding-bottom:22px}
 .step{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:stretch;overflow:hidden;border:1px solid #d7e3d6;border-radius:20px;background:#ffffffed;box-shadow:0 15px 40px #123d2b0d;min-height:330px}
-.step.reverse .visual{order:2}.step.reverse .copy{order:1}
+.step .visual{order:1}.step .copy{order:2}.step.reverse .visual{order:2}.step.reverse .copy{order:1}
 .copy{padding:clamp(22px,4vw,42px);display:flex;flex-direction:column;justify-content:center}
 .number{display:inline-flex;align-items:center;gap:9px;color:#377448;font-size:10px;font-weight:900;letter-spacing:1.5px;text-transform:uppercase}.number b{display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:#e5f0df;color:var(--forest);font:800 13px Manrope}
 h3{font-size:clamp(21px,2.5vw,27px);line-height:1.2;letter-spacing:-.7px;color:var(--forest);margin:15px 0 12px}
 .copy p{color:#56695d;font-size:13px;margin:0 0 12px}.copy ul{padding-left:19px;margin:4px 0 12px;color:#56695d;font-size:13px}.copy li{padding:3px 0}.tip{margin-top:9px;padding:12px 14px;border-left:3px solid #8cad5e;background:#f0f6eb;border-radius:0 9px 9px 0;color:#405d45;font-size:12px}.tip strong{color:var(--forest)}
-.visual{background:linear-gradient(145deg,#e5efe1,#f5f8f2);padding:22px;display:flex;align-items:center;justify-content:center;min-height:300px}.visual img{display:block;width:100%;height:100%;max-height:510px;object-fit:contain;object-position:center;border-radius:12px;border:1px solid #d8e3d6;background:#fff;box-shadow:0 10px 28px #123d2b12}
+.visual{background:linear-gradient(145deg,#e5efe1,#f5f8f2);padding:22px;display:flex;align-items:center;justify-content:center;min-height:300px}.visual img{display:block;width:100%;height:100%;max-height:510px;object-fit:contain;object-position:center;border-radius:12px;border:1px solid #d8e3d6;background:#fff;box-shadow:0 10px 28px #123d2b12;cursor:zoom-in;transition:transform .25s ease,box-shadow .25s ease}.visual img:hover{transform:scale(1.015);box-shadow:0 15px 34px #123d2b20}
 .error-step{border-color:#ead8cf}.error-step .number{color:#9b553e}.error-step .number b{background:#f8e9e2;color:#8c412e}.error-step .visual{background:linear-gradient(145deg,#f7ece7,#fbf7f2)}.error-step .tip{border-color:#c67b5f;background:#fbf0eb;color:#754632}
 .checklist{background:#103d2b;color:#fff;border-radius:20px;padding:clamp(24px,4vw,40px);margin:22px 0 30px;box-shadow:0 18px 40px #103d2b20}.checklist h2{margin:0 0 10px;font-size:25px}.checklist p{color:#dce9dd;font-size:13px;margin:0 0 14px}.checklist ul{columns:2;column-gap:35px;padding-left:20px;margin:0;color:#eef5ec;font-size:13px}.checklist li{break-inside:avoid;padding:4px 0}
 .actions{display:flex;gap:11px;flex-wrap:wrap;margin:24px 0 50px}.btn{display:inline-block;padding:12px 18px;border-radius:10px;background:linear-gradient(105deg,#0c432c,#1e6842);color:#fff;text-decoration:none;font-size:12px;font-weight:900;box-shadow:0 8px 20px #123d2b1c}.btn.alt{background:#fff;color:var(--forest);border:1px solid #cbdacb;box-shadow:none}
+.step.reveal{opacity:0;transform:translateY(34px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}.step.reveal.is-visible{opacity:1;transform:translateY(0)}
+.image-lightbox{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(5,22,14,.88);opacity:0;visibility:hidden;transition:opacity .22s ease,visibility .22s ease}.image-lightbox.open{opacity:1;visibility:visible}.image-lightbox img{display:block;max-width:min(96vw,1500px);max-height:88vh;object-fit:contain;border-radius:10px;box-shadow:0 24px 80px #0008}.lightbox-close{position:absolute;top:18px;right:22px;width:46px;height:46px;border:1px solid #ffffff70;border-radius:50%;background:#ffffff20;color:#fff;font-size:30px;line-height:1;cursor:pointer}.lightbox-hint{position:absolute;bottom:14px;left:0;right:0;text-align:center;color:#fff;font-size:12px}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.step.reveal{opacity:1;transform:none;transition:none}.visual img,.image-lightbox{transition:none}}
 footer{border-top:1px solid #cbdacb;padding:22px 0 34px;color:#68786d;font-size:12px}
-@media(max-width:760px){.step{grid-template-columns:1fr}.step.reverse .visual,.step.reverse .copy{order:initial}.visual{min-height:0;padding:15px}.visual img{height:auto;max-height:460px}.copy{padding:24px}.hero{padding-top:40px}}
+@media(max-width:760px){.step{grid-template-columns:1fr}.step .visual,.step.reverse .visual{order:1}.step .copy,.step.reverse .copy{order:2}.visual{min-height:0;padding:15px}.visual img{height:auto;max-height:460px}.copy{padding:24px}.hero{padding-top:40px}}
 @media(max-width:560px){.wrap{width:min(100% - 24px,1120px)}header{align-items:flex-start;flex-direction:column}.hero{padding-top:34px}h1{letter-spacing:-1.5px}.checklist ul{columns:1}.section-heading h2{font-size:23px}}
 </style></head>
 <body><div class="wrap">
@@ -49,4 +52,61 @@ footer{border-top:1px solid #cbdacb;padding:22px 0 34px;color:#68786d;font-size:
 <section class="checklist"><h2>Before you finish</h2><p>Use this quick checklist to make sure you have completed the account setup carefully.</p><ul><li>I used the official Agrolyst portal.</li><li>I entered the correct email address.</li><li>I created a password of at least six characters.</li><li>I checked my inbox and spam folder.</li><li>I opened the confirmation link safely.</li><li>I saw the confirmation result.</li><li>I signed in and reached my dashboard.</li><li>I read the next instructions on the dashboard.</li></ul></section>
 <div class="actions"><a class="btn" href="/signup/">Open Create Account</a><a class="btn alt" href="/login/">Go to Sign in</a><a class="btn alt" href="/how-to-use/">Back to Main Help Guide</a></div>
 <footer>© 2026 Agrolyst Integrated Farms and Services · SIWES Applicant Portal</footer>
-</div></body></html>
+</div>
+<div class="image-lightbox" id="imageLightbox" role="dialog" aria-modal="true" aria-label="Expanded screenshot" aria-hidden="true">
+<button class="lightbox-close" type="button" aria-label="Close full-size image">&times;</button>
+<img src="" alt=""><div class="lightbox-hint">Click outside the image or press Escape to close</div>
+</div>
+<script>
+(function(){
+  const cards = document.querySelectorAll('.step');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (!reduceMotion && 'IntersectionObserver' in window) {
+    cards.forEach(card => card.classList.add('reveal'));
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, {threshold: 0.12, rootMargin: '0px 0px -35px 0px'});
+    cards.forEach(card => observer.observe(card));
+  }
+  const lightbox = document.getElementById('imageLightbox');
+  const expanded = lightbox.querySelector('img');
+  const closeButton = lightbox.querySelector('.lightbox-close');
+  let previousFocus = null;
+  function closeLightbox(){
+    lightbox.classList.remove('open');
+    lightbox.setAttribute('aria-hidden','true');
+    expanded.src = '';
+    document.body.style.overflow = '';
+    if (previousFocus) previousFocus.focus();
+  }
+  document.querySelectorAll('.visual img').forEach(img => {
+    img.tabIndex = 0;
+    img.setAttribute('role','button');
+    img.setAttribute('aria-label','Open full-size image: ' + img.alt);
+    function openImage(){
+      previousFocus = img;
+      expanded.src = img.currentSrc || img.src;
+      expanded.alt = img.alt;
+      lightbox.classList.add('open');
+      lightbox.setAttribute('aria-hidden','false');
+      document.body.style.overflow = 'hidden';
+      closeButton.focus();
+    }
+    img.addEventListener('click',openImage);
+    img.addEventListener('keydown',event => {
+      if(event.key === 'Enter' || event.key === ' '){event.preventDefault();openImage();}
+    });
+  });
+  closeButton.addEventListener('click',closeLightbox);
+  lightbox.addEventListener('click',event => {if(event.target === lightbox) closeLightbox();});
+  document.addEventListener('keydown',event => {
+    if(event.key === 'Escape' && lightbox.classList.contains('open')) closeLightbox();
+  });
+})();
+</script>
+</body></html>
