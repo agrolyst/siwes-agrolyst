@@ -22,10 +22,11 @@
 <header class="header"><div class="shell nav"><a class="brand" href="/"><img src="/agrolystfarmslogo.png" alt="Agrolyst Integrated Farms and Services logo"><span>STUDENT TRAINING<small>SIWES APPLICATION PORTAL</small></span></a><nav class="links" aria-label="Main navigation"><a href="/">Programme</a><a href="/#how-it-works">How it works</a><a href="/#requirements">Documents</a><a href="/#faq">FAQs</a><a href="/dashboard/">Dashboard</a></nav><a class="btn secondary" href="/dashboard/">My dashboard</a></div></header>
 <main class="app-dashboard"><div class="shell dash-shell">
 <div id="applicant-sidebar"></div>
-<section class="dash-main"><div class="page-heading no-print"><div><div class="eyebrow">APPLICANT WORKSPACE / PLACEMENT DOCUMENT</div><h1>Acceptance letter</h1><p>Available only after approval and formal issue by Agrolyst.</p></div></div><div id="status" class="panel" role="status">Checking your application…</div><article id="letter" class="letter hidden" aria-label="Official acceptance letter"><div id="letter-content"></div></article><div id="print-actions" class="actions no-print hidden"><button class="btn" id="print">Print / Save as PDF</button></div></section>
+<section class="dash-main"><div class="page-heading no-print"><div><div class="eyebrow">APPLICANT WORKSPACE / PLACEMENT DOCUMENT</div><h1>Acceptance letter</h1><p>Available only after approval and formal issue by Agrolyst.</p></div></div><div id="status" class="panel" role="status">Checking your application…</div><article id="letter" class="letter hidden" aria-label="Official acceptance letter"><div id="letter-content"></div></article><div id="print-actions" class="actions no-print hidden"><button class="btn" id="download">Download PDF</button><button class="btn secondary" id="print">Print letter</button></div></section>
 </div></main>
 <footer><div class="shell"><strong>AGROLYST SIWES PORTAL</strong><p>Market to Farm. Empowering Farmers. Growing the Future.</p></div></footer>
 <script src="/sidebar.js"></script><script src="/app.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" referrerpolicy="no-referrer"></script>
 <script type="module">
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
 const supabase=createClient("https://orhlccyodjuhwoaelmyd.supabase.co","sb_publishable_3HEzwj5aGJx3VOQD7l8jwQ_MngS3dcK",{auth:{autoRefreshToken:true,persistSession:true,detectSessionInUrl:true}});window.agrolystSupabase=supabase;
@@ -78,7 +79,26 @@ try{
  };
  const html=template.html_template.replace(/{{\s*([a-z_]+)\s*}}/g,(_,key)=>escapeHtml(values[key]??""));
  document.getElementById("letter-content").innerHTML=html;
- document.getElementById("letter").classList.remove("hidden");document.getElementById("print-actions").classList.remove("hidden");document.getElementById("print").addEventListener("click",()=>window.print());
+ document.getElementById("letter").classList.remove("hidden");document.getElementById("print-actions").classList.remove("hidden");
+ document.getElementById("print").addEventListener("click",()=>window.print());
+ document.getElementById("download").addEventListener("click",async()=>{
+  const button=document.getElementById("download");
+  const original=button.textContent;
+  button.disabled=true;button.textContent="Preparing PDF…";
+  try{
+   if(typeof window.html2pdf!=="function"){window.print();return;}
+   await window.html2pdf().set({
+    margin:[10,10,12,10],
+    filename:"Agrolyst-SIWES-Acceptance-Letter-"+String(app.reference_no||"Applicant").replace(/[^a-z0-9_-]/gi,"-")+".pdf",
+    image:{type:"jpeg",quality:0.98},
+    html2canvas:{scale:2,useCORS:true,backgroundColor:"#ffffff"},
+    jsPDF:{unit:"mm",format:"a4",orientation:"portrait"}
+   }).from(document.getElementById("letter")).save();
+  }catch(downloadError){
+   console.error("Acceptance letter PDF download failed",downloadError);
+   status.classList.remove("hidden");status.textContent="PDF download could not start. Use Print letter and choose Save as PDF.";
+  }finally{button.disabled=false;button.textContent=original;}
+ });
  }
 }catch(error){if(!["AUTH_REQUIRED","NO_APPLICATION"].includes(error.message)){console.error(error);status.innerHTML='<h2>Could not load your letter</h2><p>Please refresh the page. If this continues, sign out and sign in again.</p><a class="btn secondary" href="/dashboard/">Return to dashboard</a>'}}
 </script>
