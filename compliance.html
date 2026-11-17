@@ -1088,7 +1088,7 @@ async function compliance(){
    for(const el of files){const file=el.files[0];if(file.size>10485760)throw Error(file.name+" exceeds 10 MB.");if(!["application/pdf","image/jpeg","image/png"].includes(file.type))throw Error("Unsupported file type: "+file.name)}
    for(const el of files){const file=el.files[0],type=el.dataset.type,path=user.id+"/"+a.id+"/"+type+"_"+Date.now()+"_"+file.name.replace(/[^a-zA-Z0-9._-]/g,"_");const up=await sb.storage.from("siwes-private").upload(path,file,{contentType:file.type,upsert:false});if(up.error)throw up.error;const md=await sb.from("siwes_documents").insert({application_id:a.id,user_id:user.id,document_type:type,storage_path:up.data.path,original_filename:file.name,mime_type:file.type,file_size_bytes:file.size});if(md.error)throw md.error}
    const val={};["full_name","email","institution","department","course_of_study","study_level","training_area","duration","start_date","end_date","address","reason_for_applying","emergency_contact_name"].forEach(k=>val[k]=f.elements[k].value.trim()||null);
-   val.status="under_review";val.submitted_at=new Date().toISOString();
+   val.status="under_review";val.submitted_at=new Date().toISOString();val.reviewed_at=null;val.reviewer_id=null;
    const{error}=await sb.from("siwes_applications").update(val).eq("id",a.id).eq("user_id",user.id);if(error)throw error;
    msg("cm","Your SIWES application has been submitted for review. Reference: "+a.reference_no+". Redirecting to your dashboard…");setTimeout(()=>location.href="/dashboard/",1200)
   }catch(e){if(e?.name==="SessionExpiredError")showAuthRecovery("cm");else msg("cm",e.message,true)}finally{b.disabled=false;b.textContent="Submit for approval"}
