@@ -30,9 +30,23 @@ h3{font-size:clamp(21px,2.5vw,27px);line-height:1.2;letter-spacing:-.7px;color:v
 .error-step{border-color:#ead8cf}.error-step .number{color:#9b553e}.error-step .number b{background:#f8e9e2;color:#8c412e}.error-step .visual{background:linear-gradient(145deg,#f7ece7,#fbf7f2)}.error-step .tip{border-color:#c67b5f;background:#fbf0eb;color:#754632}
 .checklist{background:#103d2b;color:#fff;border-radius:20px;padding:clamp(24px,4vw,40px);margin:22px 0 30px;box-shadow:0 18px 40px #103d2b20}.checklist h2{margin:0 0 10px;font-size:25px}.checklist p{color:#dce9dd;font-size:13px;margin:0 0 14px}.checklist ul{columns:2;column-gap:35px;padding-left:20px;margin:0;color:#eef5ec;font-size:13px}.checklist li{break-inside:avoid;padding:4px 0}
 .actions{display:flex;gap:11px;flex-wrap:wrap;margin:24px 0 50px}.btn{display:inline-block;padding:12px 18px;border-radius:10px;background:linear-gradient(105deg,#0c432c,#1e6842);color:#fff;text-decoration:none;font-size:12px;font-weight:900;box-shadow:0 8px 20px #123d2b1c}.btn.alt{background:#fff;color:var(--forest);border:1px solid #cbdacb;box-shadow:none}
-.step.reveal{opacity:0;transform:translateY(34px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1)}.step.reveal.is-visible{opacity:1;transform:translateY(0)}
+.step.reveal .visual{opacity:0;transform:translateX(-76px);transition:opacity .9s ease,transform 1s cubic-bezier(.16,1,.3,1)}
+.step.reveal .copy{opacity:0;transform:translateY(34px);transition:opacity .75s ease,transform .85s cubic-bezier(.16,1,.3,1)}
+.step.reveal:nth-child(2n) .copy{transform:translateX(58px)}
+.step.reveal:nth-child(3n) .visual{transform:translateY(70px)}
+.step.reveal:nth-child(4n) .copy{transform:translateX(-58px)}
+.step.reveal.is-visible .visual,.step.reveal.is-visible .copy{opacity:1;transform:translate(0,0)}
+.step.reveal.is-visible .copy{transition-delay:.16s}
+.copy h3 .typed-char{opacity:0;display:inline;animation:typedIn .025s forwards}
+@keyframes typedIn{to{opacity:1}}
+.copy p,.copy li,.copy .tip{transition:opacity .55s ease,transform .55s ease}
+.step.reveal:not(.is-visible) .copy p,.step.reveal:not(.is-visible) .copy li,.step.reveal:not(.is-visible) .copy .tip{opacity:0;transform:translateY(12px)}
+.step.reveal.is-visible .copy p,.step.reveal.is-visible .copy li,.step.reveal.is-visible .copy .tip{opacity:1;transform:translateY(0)}
+.step.reveal.is-visible .copy p{transition-delay:.35s}
+.step.reveal.is-visible .copy li:nth-child(1){transition-delay:.38s}.step.reveal.is-visible .copy li:nth-child(2){transition-delay:.46s}.step.reveal.is-visible .copy li:nth-child(3){transition-delay:.54s}.step.reveal.is-visible .copy li:nth-child(4){transition-delay:.62s}.step.reveal.is-visible .copy li:nth-child(5){transition-delay:.70s}
+.step.reveal.is-visible .copy .tip{transition-delay:.72s}
 .image-lightbox{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:24px;background:rgba(5,22,14,.88);opacity:0;visibility:hidden;transition:opacity .22s ease,visibility .22s ease}.image-lightbox.open{opacity:1;visibility:visible}.image-lightbox img{display:block;max-width:min(96vw,1500px);max-height:88vh;object-fit:contain;border-radius:10px;box-shadow:0 24px 80px #0008}.lightbox-close{position:absolute;top:18px;right:22px;width:46px;height:46px;border:1px solid #ffffff70;border-radius:50%;background:#ffffff20;color:#fff;font-size:30px;line-height:1;cursor:pointer}.lightbox-hint{position:absolute;bottom:14px;left:0;right:0;text-align:center;color:#fff;font-size:12px}
-@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.step.reveal{opacity:1;transform:none;transition:none}.visual img,.image-lightbox{transition:none}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.step.reveal .visual,.step.reveal .copy,.step.reveal.is-visible .visual,.step.reveal.is-visible .copy{opacity:1;transform:none;transition:none}.copy h3 .typed-char{opacity:1;animation:none}.step.reveal:not(.is-visible) .copy p,.step.reveal:not(.is-visible) .copy li,.step.reveal:not(.is-visible) .copy .tip{opacity:1;transform:none}.visual img,.image-lightbox{transition:none}}
 footer{border-top:1px solid #cbdacb;padding:22px 0 34px;color:#68786d;font-size:12px}
 @media(max-width:760px){.step{grid-template-columns:1fr}.step .visual,.step.reverse .visual{order:1}.step .copy,.step.reverse .copy{order:2}.visual{min-height:0;padding:15px}.visual img{height:auto;max-height:460px}.copy{padding:24px}.hero{padding-top:40px}}
 @media(max-width:560px){.wrap{width:min(100% - 24px,1120px)}header{align-items:flex-start;flex-direction:column}.hero{padding-top:34px}h1{letter-spacing:-1.5px}.checklist ul{columns:1}.section-heading h2{font-size:23px}}
@@ -62,7 +76,22 @@ footer{border-top:1px solid #cbdacb;padding:22px 0 34px;color:#68786d;font-size:
   const cards = document.querySelectorAll('.step');
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (!reduceMotion && 'IntersectionObserver' in window) {
-    cards.forEach(card => card.classList.add('reveal'));
+    cards.forEach(card => {
+      card.classList.add('reveal');
+      const heading = card.querySelector('.copy h3');
+      if (heading) {
+        const original = heading.textContent;
+        heading.setAttribute('aria-label', original);
+        heading.textContent = '';
+        Array.from(original).forEach((character, index) => {
+          const span = document.createElement('span');
+          span.className = 'typed-char';
+          span.textContent = character === ' ' ? '\\u00a0' : character;
+          span.style.animationDelay = (index * 24) + 'ms';
+          heading.appendChild(span);
+        });
+      }
+    });
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -70,7 +99,7 @@ footer{border-top:1px solid #cbdacb;padding:22px 0 34px;color:#68786d;font-size:
           observer.unobserve(entry.target);
         }
       });
-    }, {threshold: 0.12, rootMargin: '0px 0px -35px 0px'});
+    }, {threshold: 0.12, rootMargin: '0px 0px -45px 0px'});
     cards.forEach(card => observer.observe(card));
   }
   const lightbox = document.getElementById('imageLightbox');
