@@ -31,6 +31,9 @@ h3{font-size:clamp(21px,2.5vw,27px);line-height:1.2;letter-spacing:-.7px;color:v
 .checklist{background:#103d2b;color:#fff;border-radius:20px;padding:clamp(24px,4vw,40px);margin:22px 0 30px;box-shadow:0 18px 40px #103d2b20}.checklist h2{margin:0 0 10px;font-size:25px}.checklist p{color:#dce9dd;font-size:13px;margin:0 0 14px}.checklist ul{columns:2;column-gap:35px;padding-left:20px;margin:0;color:#eef5ec;font-size:13px}.checklist li{break-inside:avoid;padding:4px 0}
 .actions{display:flex;gap:11px;flex-wrap:wrap;margin:24px 0 50px}.btn{display:inline-block;padding:12px 18px;border-radius:10px;background:linear-gradient(105deg,#0c432c,#1e6842);color:#fff;text-decoration:none;font-size:12px;font-weight:900;box-shadow:0 8px 20px #123d2b1c}.btn.alt{background:#fff;color:var(--forest);border:1px solid #cbdacb;box-shadow:none}
 .step.reveal .visual{opacity:0;transform:translateX(-76px);transition:opacity .9s ease,transform 1s cubic-bezier(.16,1,.3,1)}
+.step.reveal:nth-child(2n) .visual{transform:translateX(76px)}
+.step.reveal:nth-child(3n) .visual{transform:translateY(70px)}
+.step.reveal.is-visible .visual{opacity:1;transform:translate(0,0)}
 .step.reveal .copy{opacity:1;transform:none}
 .step.reveal.is-visible .copy{opacity:1;transform:none}
 .copy .typed-char{opacity:0;animation:typedIn .01s linear forwards}
