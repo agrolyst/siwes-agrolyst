@@ -22,7 +22,7 @@
 <header class="header"><div class="shell nav"><a class="brand" href="/"><img src="/agrolystfarmslogo.png" alt="Agrolyst Integrated Farms and Services logo"><span>STUDENT TRAINING<small>SIWES APPLICATION PORTAL</small></span></a><nav class="links" aria-label="Main navigation"><a href="/">Programme</a><a href="/#how-it-works">How it works</a><a href="/#requirements">Documents</a><a href="/#faq">FAQs</a><a href="/dashboard/">Dashboard</a></nav><a class="btn secondary" href="/dashboard/">My dashboard</a></div></header>
 <main class="app-dashboard"><div class="shell dash-shell">
 <div id="applicant-sidebar"></div>
-<section class="dash-main"><div class="page-heading no-print"><div><div class="eyebrow">APPLICANT WORKSPACE / PLACEMENT DOCUMENT</div><h1>Acceptance letter</h1><p>Available only after approval and formal issue by Agrolyst.</p></div></div><div id="status" class="panel" role="status">Checking your application…</div><article id="letter" class="letter hidden" aria-label="Official acceptance letter"><div id="letter-content"></div></article><div id="print-actions" class="actions no-print hidden"><button class="btn" id="download">Download PDF</button><button class="btn secondary" id="print">Print letter</button></div></section>
+<section class="dash-main"><div class="page-heading no-print"><div><div class="eyebrow">APPLICANT WORKSPACE / PLACEMENT DOCUMENT</div><h1>Acceptance letter</h1><p>Automatically issued after approval. Download your official PDF letter here.</p></div></div><div id="status" class="panel" role="status">Checking your application…</div><article id="letter" class="letter hidden" aria-label="Official acceptance letter"><div id="letter-content"></div></article><div id="print-actions" class="actions no-print hidden"><button class="btn" id="download">Download PDF</button><button class="btn secondary" id="print">Print letter</button></div></section>
 </div></main>
 <footer><div class="shell"><strong>AGROLYST SIWES PORTAL</strong><p>Market to Farm. Empowering Farmers. Growing the Future.</p></div></footer>
 <script src="/sidebar.js"></script><script src="/app.js"></script>
@@ -51,7 +51,7 @@ try{
  }
  if(!app){status.innerHTML='<h2>No application found</h2><p>You have not started a SIWES application yet.</p><a class="btn" href="/compliance/">Start application</a>';throw new Error("NO_APPLICATION")}
  if(app.status!=="acceptance_letter_issued"||!app.acceptance_letter_number||!app.acceptance_letter_issued_at){
- status.innerHTML='<h2>Letter not yet available</h2><p>Your current application status is <strong>'+esc(app.status||"Not submitted")+'</strong>.</p><div class="notice">Complete your compliance submission and wait for an authorised reviewer to approve and formally issue your letter. An account or application alone does not generate an acceptance letter.</div><a class="btn" href="/dashboard/">Check application status</a>';
+ status.innerHTML='<h2>Letter not yet available</h2><p>Your current application status is <strong>'+esc(app.status||"Not submitted")+'</strong>.</p><div class="notice">Complete your compliance submission and wait for the application decision. Once approved, your official acceptance letter will be issued automatically and made available here.</div><a class="btn" href="/dashboard/">Check application status</a>';
  }else{
  status.classList.add("hidden");
  const {data:template,error:templateError}=await supabase.from("siwes_document_templates").select("html_template,title,subject").eq("template_key","siwes_acceptance_letter").eq("active",true).maybeSingle();
