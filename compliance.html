@@ -1065,7 +1065,6 @@ async function compliance(){
      countryOrder:["ng","gb","us"],
      separateDialCode:true,
      countrySearch:true,
-     autoPlaceholder:"off",
      strictMode:true
     });
     privatePhone.addEventListener("countrychange",()=>{privatePhone.value="";privatePhone.placeholder="Not available for now";privatePhoneHint.textContent="Phone number collection is temporarily paused. You may select a country code, but email is currently the only available contact method.";});
