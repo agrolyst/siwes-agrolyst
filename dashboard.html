@@ -988,6 +988,8 @@ function renderCorrectionTasks(application){
    const patch={status:"under_review",submitted_at:new Date().toISOString(),reviewed_at:null,reviewer_id:null,updated_at:new Date().toISOString()};
    const files=[];
    for(const key of requested){
+    const card=form.querySelector('[data-correction-card="'+key+'"]');
+    if(card?.querySelector("[data-editor]")?.hidden)throw new Error("Click Fix now to open: "+correctionFieldLabel(key)+".");
     const field=form.querySelector('[data-correction-field="'+key+'"]');
     if(!field)throw new Error("Please open and complete: "+correctionFieldLabel(key)+".");
     if(documentFields.includes(key)){
