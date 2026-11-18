@@ -15,6 +15,18 @@
 
 /* Keep the acceptance-letter workspace visually aligned with the dashboard. */
 .dash-main{min-width:0;animation:letterWorkspaceIn .5s cubic-bezier(.2,.75,.25,1) both}.page-heading{background:linear-gradient(125deg,#123d2b,#1e6842);color:#fff;border-radius:18px;padding:26px 28px;margin-bottom:20px;position:relative;overflow:hidden}.page-heading h1{color:#fff}.page-heading p{color:#e0ece3}.page-heading .eyebrow{color:#d4e76a}.letter{border-radius:14px;box-shadow:0 18px 45px #123d2b10;animation:letterWorkspaceIn .55s .08s both}.panel{border-radius:14px}@keyframes letterWorkspaceIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}@media(prefers-reduced-motion:reduce){.dash-main,.letter{animation:none}}
+
+/* Official letter typography and watermark */
+.letter{position:relative;font-family:"Times New Roman",Times,serif;color:#202820;background:#fff;border:7px double #b8cbb8;overflow:hidden}
+.letter:before{content:"AGROLYST";position:absolute;z-index:0;top:43%;left:50%;transform:translate(-50%,-50%) rotate(-28deg);font:700 64px "Times New Roman",Times,serif;letter-spacing:8px;color:rgba(30,104,66,.055);white-space:nowrap;pointer-events:none}
+.letter #letter-content{position:relative;z-index:1;font-family:"Times New Roman",Times,serif}
+.letter #letter-content p{font-family:"Times New Roman",Times,serif;font-size:12pt;line-height:1.7}
+.letter-head{border-bottom:3px solid #1e6842;padding-bottom:20px}
+.letter-head img{width:86px;height:78px}
+.letter-head strong{font-family:"Times New Roman",Times,serif;font-size:17pt;color:#123d2b}
+.letter-head span{font-family:"Times New Roman",Times,serif;font-size:11pt}
+@media print{.letter{border:7px double #b8cbb8;box-shadow:none}.letter:before{color:rgba(30,104,66,.055)}}
+
 </style>
 <meta name="robots" content="noindex,follow">
 </head>
