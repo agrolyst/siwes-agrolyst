@@ -929,6 +929,108 @@ async function loadInstitutionSuggestions(input){
   console.warn("Could not load institution suggestions; manual entry remains available.",error);
  }
 }
+
+function correctionFieldLabel(key){
+ const labels={full_name:"Full name",institution:"Name of institution",department:"Department",course_of_study:"Course of study",study_level:"Current level of study",training_area:"Preferred training area",duration:"Required training duration",start_date:"Proposed SIWES start date",end_date:"Proposed SIWES end date",address:"Contact address",reason_for_applying:"Reason for applying",emergency_contact_name:"Emergency contact name",school_introduction_letter:"School Letter of Introduction",student_id:"Valid Student Identification Card",cv:"Curriculum Vitae (CV)",passport_photo:"Passport photograph",other_information:"Additional information requested"};
+ return labels[key]||key.replace(/_/g," ");
+}
+function renderCorrectionTasks(application){
+ const shell=document.querySelector(".compliance-wizard");
+ if(!shell)throw new Error("The compliance workspace could not be opened.");
+ const allowed=["full_name","institution","department","course_of_study","study_level","training_area","duration","start_date","end_date","address","reason_for_applying","emergency_contact_name","school_introduction_letter","student_id","cv","passport_photo","other_information"];
+ const requested=(Array.isArray(application.requested_fields)?application.requested_fields:[]).filter(k=>allowed.includes(k));
+ if(!requested.length)requested.push("other_information");
+ const documentFields=["school_introduction_letter","student_id","cv","passport_photo"];
+ const html=requested.map(key=>{
+  const label=correctionFieldLabel(key),isDoc=documentFields.includes(key),isOther=key==="other_information";
+  let editor="";
+  if(isDoc){
+   const accept=key==="passport_photo"?".jpg,.jpeg,.png":" .pdf,.jpg,.jpeg,.png";
+   editor='<input type="file" data-correction-field="'+key+'" accept="'+accept.trim()+'" required><small>PDF, JPG or PNG · Maximum 10 MB'+(key==="passport_photo"?" · JPG or PNG only":"")+'</small>';
+  }else{
+   const value=isOther?(application.applicant_response||""):(application[key]||"");
+   const type=(key==="start_date"||key==="end_date")?"date":"text";
+   if(isOther||key==="reason_for_applying"||key==="address"){
+    editor='<textarea data-correction-field="'+key+'" rows="'+(isOther||key==="reason_for_applying"?5:3)+'" '+(key==="reason_for_applying"?'minlength="20"':"")+' required placeholder="'+(isOther?"Enter the information requested by the reviewer": "Enter your corrected "+label.toLowerCase())+'">'+esc(value)+'</textarea>';
+   }else{
+    editor='<input type="'+type+'" data-correction-field="'+key+'" value="'+esc(value)+'" required placeholder="Enter corrected '+label.toLowerCase()+'">';
+   }
+  }
+  return '<article class="dash-card correction-item" data-correction-card="'+key+'" style="margin:0 0 14px;border:1px solid #dfe8dc"><div style="display:flex;justify-content:space-between;gap:14px;align-items:flex-start;flex-wrap:wrap"><div><div class="eyebrow">INFORMATION REQUESTED</div><h3 style="margin:4px 0 5px">'+esc(label)+'</h3><p style="margin:0;color:#65746a;font-size:13px">Only this requested item needs your attention.</p></div><button type="button" class="btn dash-primary" data-fix="'+key+'">Fix now</button></div><div class="correction-editor" data-editor="'+key+'" hidden style="margin-top:16px"><label style="display:block;font-weight:700;margin-bottom:8px">'+esc(label)+'</label>'+editor+'</div></article>';
+ }).join("");
+ shell.innerHTML='<div class="wizard-heading"><div><div class="eyebrow">APPLICANT WORKSPACE / COMPLIANCE</div><h1>Information requested</h1><p>Agrolyst needs the specific item(s) below. You do not need to complete your entire application again.</p></div><a class="btn outline" href="/dashboard/">← Dashboard</a></div><div class="notice warning" style="margin:18px 0"><strong>Reviewer message</strong><p style="margin:7px 0 0">'+esc(application.review_notes||"Please provide the information listed below.")+'</p></div><div id="correction-message" class="message hidden"></div><form id="correction-form">'+html+'<div style="display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap;margin-top:20px"><button type="submit" class="btn dash-primary" id="submit-corrections">Submit corrections for review</button></div></form>';
+ const form=document.getElementById("correction-form");
+ form.addEventListener("click",event=>{
+  const button=event.target.closest("[data-fix]");
+  if(!button)return;
+  const key=button.dataset.fix,editor=form.querySelector('[data-editor="'+key+'"]');
+  editor.hidden=!editor.hidden;
+  button.textContent=editor.hidden?"Fix now":"Close";
+  if(!editor.hidden){editor.querySelector("input,textarea")?.focus();editor.scrollIntoView({behavior:"smooth",block:"center"});}
+ });
+ form.addEventListener("submit",async event=>{
+  event.preventDefault();
+  const button=document.getElementById("submit-corrections"),message=document.getElementById("correction-message");
+  const say=(text,isError=false)=>{message.textContent=text;message.classList.remove("hidden","error");if(isError)message.classList.add("error");};
+  button.disabled=true;button.textContent="Submitting corrections…";
+  try{
+   const patch={status:"under_review",submitted_at:new Date().toISOString(),reviewed_at:null,reviewer_id:null,updated_at:new Date().toISOString()};
+   const files=[];
+   for(const key of requested){
+    const field=form.querySelector('[data-correction-field="'+key+'"]');
+    if(!field)throw new Error("Please open and complete: "+correctionFieldLabel(key)+".");
+    if(documentFields.includes(key)){
+     const file=field.files&&field.files[0];
+     if(!file)throw new Error("Please upload: "+correctionFieldLabel(key)+".");
+     if(file.size>10485760)throw new Error(file.name+" exceeds 10 MB.");
+     const allowedTypes=key==="passport_photo"?["image/jpeg","image/png"]:["application/pdf","image/jpeg","image/png"];
+     if(!allowedTypes.includes(file.type))throw new Error("Unsupported file type for "+correctionFieldLabel(key)+".");
+     files.push({key,file});
+    }else{
+     const value=String(field.value||"").trim();
+     if(!value)throw new Error("Please complete: "+correctionFieldLabel(key)+".");
+     if(key==="reason_for_applying"&&value.length<20)throw new Error("Please provide at least 20 characters for your reason for applying.");
+     if(key==="other_information")patch.applicant_response=value;
+     else patch[key]=value;
+    }
+   }
+   if(patch.start_date&&patch.end_date&&new Date(patch.end_date)<new Date(patch.start_date))throw new Error("End date must not be before the start date.");
+   for(const item of files){
+    const file=item.file,path=user.id+"/"+application.id+"/"+item.key+"_"+Date.now()+"_"+file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
+    const upload=await sb.storage.from("siwes-private").upload(path,file,{contentType:file.type,upsert:false});
+    if(upload.error)throw upload.error;
+    const metadata=await sb.from("siwes_documents").insert({application_id:application.id,user_id:user.id,document_type:item.key,storage_path:upload.data.path,original_filename:file.name,mime_type:file.type,file_size_bytes:file.size});
+    if(metadata.error)throw metadata.error;
+   }
+   const {error}=await sb.from("siwes_applications").update(patch).eq("id",application.id).eq("user_id",user.id);
+   if(error)throw error;
+   say("Your corrections have been submitted successfully. They are now awaiting review.");
+   button.textContent="Submitted";
+   setTimeout(()=>location.href="/dashboard/",1100);
+  }catch(error){say(error.message||"Could not submit your corrections.",true);button.disabled=false;button.textContent="Submit corrections for review";}
+ });
+}
+function collectCorrectionRequest(application){
+ const choices=["full_name","institution","department","course_of_study","study_level","training_area","duration","start_date","end_date","address","reason_for_applying","emergency_contact_name","school_introduction_letter","student_id","cv","passport_photo","other_information"];
+ return new Promise(resolve=>{
+  const layer=document.createElement("div");
+  layer.style.cssText="position:fixed;inset:0;z-index:99999;background:rgba(10,25,16,.66);display:flex;align-items:center;justify-content:center;padding:16px";
+  layer.innerHTML='<form id="request-correction-form" style="background:#fff;width:min(620px,100%);max-height:92vh;overflow:auto;border-radius:18px;padding:22px;color:#24432e;box-shadow:0 24px 70px rgba(0,0,0,.25)"><div class="eyebrow">REVIEWER ACTION</div><h2 style="margin:5px 0 8px">Choose what the applicant must fix</h2><p style="color:#68756b;font-size:13px">Select only the information or documents you need. The applicant will see only these items in Compliance.</p><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:9px;margin:16px 0">'+choices.map(key=>'<label style="display:flex;gap:9px;align-items:flex-start;padding:10px;border:1px solid #dfe8dc;border-radius:10px;font-size:13px"><input type="checkbox" name="requested" value="'+key+'"><span>'+esc(correctionFieldLabel(key))+'</span></label>').join("")+'</div><label style="display:block;font-weight:700;margin:10px 0 7px">Message to applicant</label><textarea name="review_note" rows="4" required style="width:100%;box-sizing:border-box" placeholder="Explain what needs to be corrected or uploaded."></textarea><p id="request-correction-error" style="color:#a33;font-size:13px" hidden></p><div style="display:flex;justify-content:flex-end;gap:9px;margin-top:16px"><button type="button" class="btn outline" data-cancel>Cancel</button><button type="submit" class="btn dash-primary">Send correction request</button></div></form>';
+  document.body.appendChild(layer);
+  const finish=value=>{layer.remove();resolve(value)};
+  layer.querySelector("[data-cancel]").onclick=()=>finish(null);
+  layer.addEventListener("click",event=>{if(event.target===layer)finish(null)});
+  layer.querySelector("form").onsubmit=event=>{
+   event.preventDefault();
+   const fields=[...layer.querySelectorAll('input[name="requested"]:checked')].map(input=>input.value);
+   const note=layer.querySelector('[name="review_note"]').value.trim(),error=layer.querySelector("#request-correction-error");
+   if(!fields.length){error.textContent="Select at least one item.";error.hidden=false;return}
+   if(!note){error.textContent="Please add a message for the applicant.";error.hidden=false;return}
+   finish({fields,note});
+  };
+ });
+}
+
 async function compliance(){
  if(!user){loginNotice();return}
  layout('<section class="dashboard"><div class="shell compliance-wizard"><div class="wizard-heading"><div><div class="eyebrow">APPLICANT WORKSPACE / COMPLIANCE</div><h1>My application</h1><p>Complete one short section at a time. Your progress is saved as you continue.</p></div><a class="btn outline" href="/dashboard/">← Dashboard</a></div><div class="wizard-steps" aria-label="Application steps"><div class="wizard-step-label active" data-step-label="0"><b>1</b><span>Personal details</span></div><div class="wizard-step-label" data-step-label="1"><b>2</b><span>Education</span></div><div class="wizard-step-label" data-step-label="2"><b>3</b><span>Required docs</span></div><div class="wizard-step-label" data-step-label="3"><b>4</b><span>Optional & contacts</span></div><div class="wizard-step-label" data-step-label="4"><b>5</b><span>Confirm</span></div></div><div class="wizard-track" aria-hidden="true"><span id="wizard-progress"></span></div><div class="notice"><strong>Required uploads:</strong> (1) School Letter of Introduction and (2) Valid Student Identification Card. <strong>Optional uploads:</strong> (3) Curriculum Vitae (CV) and (4) recent passport photograph. PDF, JPG or PNG files are accepted up to 10 MB each; the passport photo must be JPG or PNG.</div><div id="cm" class="message hidden"></div><form id="cf" class="form-card"><h2>Student information</h2><p class="small">Fields marked * are required.</p><div class="fields"><div class="field"><label>Full name *</label><input name="full_name" autocomplete="name" required></div><div class="field phone-unavailable-field"><label for="private-phone">Phone number <span class="phone-hint">(temporarily unavailable)</span></label><input id="private-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" readonly aria-describedby="private-phone-hint" placeholder="Not available for now"><small id="private-phone-hint" class="phone-hint">Phone number collection is temporarily paused. You may select a country code, but email is currently the only available contact method.</small></div><div class="field"><label>Email address *</label><input name="email" type="email" autocomplete="email" required></div><div class="field"><label>Name of institution *</label><input name="institution" list="institution-options" autocomplete="organization" placeholder="Start typing your university name" required><datalist id="institution-options"></datalist><small class="institution-hint">Choose a suggestion, or type your institution’s full name if it is not listed.</small></div><div class="field"><label>Department *</label><input name="department" required></div><div class="field"><label>Course of study *</label><input name="course_of_study" required></div><div class="field"><label>Current level of study *</label><select name="study_level" required><option value="">Select level</option><option>100 level</option><option>200 level</option><option>300 level</option><option>400 level</option><option>500 level</option><option>ND I</option><option>ND II</option><option>HND I</option><option>HND II</option><option>Other</option></select></div><div class="field"><label>Preferred training area *</label><select name="training_area" required><option value="">Select training area</option><option>Farm and poultry operations</option><option>Crop production and farm management</option><option>Agribusiness and administration</option><option>Marketing and customer service</option><option>Digital and technology</option><option>Finance and record keeping</option><option>Open to available placement</option></select></div><div class="field"><label>Required training duration *</label><select name="duration" required><option value="">Select duration</option><option>Institution\'s required duration</option><option>3 months</option><option>4 months</option><option>6 months</option><option>12 months</option><option>Other / to be confirmed</option></select></div><div class="field"><label>Proposed SIWES start date *</label><input name="start_date" type="date" required></div><div class="field"><label>Proposed SIWES end date *</label><input name="end_date" type="date" required></div><div class="field full"><label for="private-address">Contact address *</label><div class="address-autocomplete" id="private-address-wrap"><textarea id="private-address" name="address" autocomplete="street-address" required maxlength="500" aria-autocomplete="list" aria-expanded="false" aria-controls="private-address-suggestions" aria-describedby="private-address-hint" placeholder="Start typing your street, area or landmark"></textarea><div id="private-address-suggestions" class="address-suggestions" role="listbox" aria-label="Google address suggestions" hidden></div></div><small id="private-address-hint" class="address-hint" role="status">Start typing at least 3 characters to find Google address suggestions. You can also enter your address manually.</small></div><div class="field full"><label>Why have you chosen Agrolyst for your SIWES training? *</label><textarea name="reason_for_applying" rows="5" minlength="20" placeholder="Tell us what you hope to learn, the skills you want to develop, and how the training relates to your course of study." required></textarea></div></div><h2 style="margin-top:28px">Required documents</h2><div class="fields"><div class="field"><label>1. School letter of introduction *</label><input type="file" data-type="school_introduction_letter" accept=".pdf,.jpg,.jpeg,.png" required></div><div class="field"><label>2. Valid student identification card *</label><input type="file" data-type="student_id" accept=".pdf,.jpg,.jpeg,.png" required></div></div><h2 style="margin-top:28px">Optional documents</h2><p class="small">These uploads are not required to submit your application. You may add them now or leave them blank.</p><div class="fields"><div class="field"><label>Curriculum Vitae (CV)</label><input type="file" data-type="cv" accept=".pdf,.jpg,.jpeg,.png"></div><div class="field"><label>Recent passport photograph</label><input type="file" data-type="passport_photo" accept=".jpg,.jpeg,.png"></div></div><h2 style="margin-top:28px">Additional information (optional)</h2><p class="small">These details help us contact someone in an emergency. You can leave both fields empty.</p><div class="fields"><div class="field"><label>Emergency contact name</label><input name="emergency_contact_name" autocomplete="off"></div><div class="field"><label>Emergency contact phone <span class="phone-hint">(not available)</span></label><input name="emergency_contact_phone" type="tel" autocomplete="off" disabled placeholder="Not available for now"><small class="phone-hint">Email is the only active contact method for now.</small></div></div><div class="notice warning" style="margin-top:24px"><strong>Important notice</strong><br>All applications and documents are subject to review by Agrolyst Integrated Farms and Services. Creating an account or submitting documents does not guarantee placement. An acceptance letter is available only after approval and official issue.</div><label class="small" style="display:flex;gap:10px;align-items:flex-start;margin-top:20px"><input type="checkbox" id="truth" required> I confirm that the information provided is accurate and understand that submitting this application does not guarantee placement.</label><p style="margin-top:22px"><button id="send" type="submit">Submit SIWES application</button></p></form></div></section>');
@@ -938,7 +1040,8 @@ async function compliance(){
   if(!a){const{data,error}=await sb.from("siwes_applications").insert({user_id:user.id,email:user.email||null}).select("*").single();if(error)throw error;a=data}
   const{count:uploadedCount,error:countError}=await sb.from("siwes_documents").select("id",{count:"exact",head:true}).eq("application_id",a.id).eq("user_id",user.id);if(countError)throw countError;
   if(a.status==="under_review"&&(uploadedCount||0)===0){const{error:resetError}=await sb.from("siwes_applications").update({status:"compliance_incomplete",submitted_at:null,updated_at:new Date().toISOString()}).eq("id",a.id).eq("user_id",user.id);if(resetError)throw resetError;a.status="compliance_incomplete"}
-  if(!["compliance_incomplete","changes_requested"].includes(a.status)){
+  if(a.status==="changes_requested"){renderCorrectionTasks(a);return}
+   if(!["compliance_incomplete","changes_requested"].includes(a.status)){
    const wizard=document.querySelector(".compliance-wizard");
    if(wizard){
     const status=a.status||"unknown";
